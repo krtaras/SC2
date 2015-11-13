@@ -1,0 +1,34 @@
+.sc-extension-html {
+  max-height: 350px;
+  height: 48px;
+  overflow: auto;
+}
+.sc-extension {
+  width: 370px;
+  height: 90px;
+  font-size: 12px;
+  background-color: red;
+  margin: 0px;
+}
+.sc-extension .player .row {
+  padding: 5px;
+  width: 100%;
+}
+.sc-extension .player .row .col {
+  overflow: auto;
+  height: 100%;
+  float: left;
+}
+.sc-extension .player .row .sound-img {
+  width: 85px;
+  height: 85px;
+  background-color: green;
+}
+.sc-extension .player .row .player-actions {
+  width: 275px;
+}
+.sc-extension .player .row .player-actions .action-row {
+  width: 100%;
+  height: 28px;
+  background-color: blue;
+}
