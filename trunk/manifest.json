@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+
+  "name": "SoundCloud Player",
+  "description": "SoundCloud Player",
+  "version": "2.0.0001",
+  "icons": {
+          "16": "icons/16.png",
+          "19": "icons/19.png",
+          "32": "icons/32.png",
+          "38": "icons/38.png",
+          "48": "icons/48.png", 
+          "128": "icons/128.png"
+  },
+  "browser_action": {
+      "default_icon": {
+          "16": "icons/16.png",
+          "19": "icons/19.png",
+          "32": "icons/32.png",
+          "38": "icons/38.png",
+          "48": "icons/48.png", 
+          "128": "icons/128.png"
+      },
+      "default_title": "SoundCloud Player",
+      "default_popup": "popup.html"
+  },
+  
+  "background": {"page": "background.html"},
+  "permissions": ["tabs", "storage" , "http://*/*", "https://*/*"]
+}
