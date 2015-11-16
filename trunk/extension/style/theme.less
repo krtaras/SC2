@@ -1,7 +1,3 @@
-//colors:
-@background-color: red;
-@text-color: white;
-
 .sc-extension-html {
 	max-height: 350px;
 	height: 48px;
@@ -12,23 +8,66 @@
 	width: 370px;
 	height: 90px;
 	font-size: 12px;
-	background-color: @background-color;
+	background-color: #333;
+	border: 3px solid #FF6700;
 	margin: 0px;
 	
+	.row {
+		width: 100%;
+		padding: 5px;
+		.col {
+			float: left;
+		}
+	}
+	
 	.player {
-			.sound-img {
-				width: 85px;
-				height: 85px;
-				background-color: green;
-			}
+		.sound-img {
+			width: 85px;
+			height: 85px;
+			background-image: linear-gradient(135deg,#70929c,#8e8485);
+		}
+		
+		.player-actions {
+			width: 275px;
 			
-			.player-actions {
-				width: 275px;
+			.action-row {
+				width: 100%;
+				height: 28px;
 				
-				.action-row {
-					width: 100%;
-					height: 28px;
-					background-color: blue;	
+				.pl-title {
+					float: left;
+					width: 150px;
+				}
+				
+				.pl-minimize {
+					float: right;
+				}
+				
+				.pl-buttons {
+					float: left;
+					.button {
+						i.material-icons {
+							color: black;
+							cursor: pointer;
+							&:hover {
+								color: orangered;
+							}
+						}
+						&:hover {
+							background-color: red;
+						}
+					}
+				}
+				
+				.pl-volume {
+					float: left;
+					input[type="range"] {
+						width: 80px;
+					}
+				}
+				
+				.pl-repeat {
+					float: left;
 				}
 			}
 		}
