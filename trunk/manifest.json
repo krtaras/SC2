@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-
+  "minimum_chrome_version": "26.0.0.0",
   "name": "SoundCloud Player",
   "description": "SoundCloud Player",
   "version": "2.0.0001",
@@ -24,7 +24,6 @@
       "default_title": "SoundCloud Player",
       "default_popup": "popup.html"
   },
-  
   "background": {"page": "background.html"},
-  "permissions": ["tabs", "storage" , "http://*/*", "https://*/*"]
+  "permissions": ["background", "tabs", "storage" , "http://*/*", "https://*/*"]
 }

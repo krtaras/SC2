@@ -1,38 +1,16 @@
-<html class="sc-extension-html">
+<html class="sc-extension-html" ng-app="sound-cloud-player">
 	<head>
-		<script type="text/javascript" src="extension/lib/angular.min.js"></script>
 		<script type="text/javascript" src="extension/lib/jquery.min.js"></script>
+		<script type="text/javascript" src="extension/lib/angular.min.js"></script>
+		<script type="text/javascript" src="extension/app/controller/app.js"></script>
+		<script type="text/javascript" src="extension/app/controller/playerController.js"></script>
 		<link rel="stylesheet" type="text/css" href="extension/style/theme.css" />
 		<link rel="stylesheet" type="text/css" href="extension/style/materialize-icons.css" />
 	</head>
 	
 	<body class="sc-extension">
-		<div class="player min-version">
-			<div class="row">
-				<div class="col player-actions">
-					<div class="action-row">
-						<div class="pl-title">
-							Sound name...........................................
-						</div>
-						<i class="material-icons" style="font-size: 22px; margin-top: 4px; margin-left: 4px;">replay</i>
-						<div class="pl-minimize">
-							<i class="material-icons">fullscreen_exit</i>
-						</div>
-					</div>
-					<div class="action-row">
-						<div class="pl-buttons">
-							<i class="material-icons">fast_rewind</i>
-							<i class="material-icons">stop</i>
-							<i class="material-icons">play_arrow</i>
-							<i class="material-icons">fast_forward</i>
-						</div>
-						<div class="pl-volume">		
-							<i class="material-icons">volume_up</i>
-							<input type="range">
-						</div>
-					</div>
-				</div>
-			</div>
+		<div ng-controller="playerController">
+			<div ng-include="typeView"></div>
 		</div>
 	</body>
 </html>

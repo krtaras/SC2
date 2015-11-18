@@ -6,7 +6,7 @@
 .sc-extension {
   font-size: 12px;
   background-color: #333;
-  width: 100%;
+  height: 100%;
   margin: 0px;
 }
 .sc-extension .row {
@@ -46,16 +46,42 @@
   float: left;
   width: 255px;
 }
+.sc-extension .player.full-version .pl-volume {
+  margin-left: 10px;
+}
 .sc-extension .player.full-version .pl-volume input[type="range"] {
   width: 75px;
   margin-top: 9px;
   margin-left: 2px;
   float: right;
 }
+.sc-extension .player.full-version .pl-navigate {
+  float: left;
+  margin-left: 5px;
+}
+.sc-extension .player.full-version .pl-navigate label {
+  color: white;
+  font-size: 12px;
+  float: right;
+  margin-top: 5px;
+  margin-left: 5px;
+}
 .sc-extension .player.full-version .pl-navigate input[type="range"] {
   width: 195px;
   float: left;
   margin-top: 10px;
+}
+.sc-extension .player.full-version .pl-tabs {
+  float: right;
+  margin-right: 2px;
+  margin-top: -2px;
+}
+.sc-extension .player.full-version .pl-tabs i {
+  font-size: 30px;
+}
+.sc-extension .player.full-version .pl-minimize {
+  margin-top: -2px;
+  margin-right: 1px;
 }
 .sc-extension .player.min-version {
   width: 210px;
@@ -66,13 +92,18 @@
 }
 .sc-extension .player.min-version .pl-title {
   float: left;
-  width: 150px;
+  width: 145px;
+}
+.sc-extension .player.min-version .pl-volume {
+  margin-left: 5px;
 }
 .sc-extension .player.min-version .pl-volume input[type="range"] {
-  width: 40px;
+  width: 50px;
   margin-top: 9px;
-  margin-left: 2px;
   float: right;
+}
+.sc-extension .player.min-version .pl-minimize {
+  margin-right: 10px;
 }
 .sc-extension .player .pl-title {
   float: left;
@@ -89,7 +120,6 @@
 .sc-extension .player .pl-minimize i {
   margin: 0px;
   font-size: 24px;
-  margin-top: -5px;
 }
 .sc-extension .player .pl-buttons {
   float: left;
@@ -98,7 +128,6 @@
 }
 .sc-extension .player .pl-volume {
   float: left;
-  margin-left: 10px;
   margin-top: 2px;
 }
 .sc-extension .player .pl-volume i {
@@ -110,25 +139,6 @@
 }
 .sc-extension .player .pl-repeat i {
   font-size: 24px;
-}
-.sc-extension .player .pl-navigate {
-  float: left;
-  margin-left: 5px;
-}
-.sc-extension .player .pl-navigate label {
-  color: white;
-  font-size: 12px;
-  float: right;
-  margin-top: 5px;
-  margin-left: 5px;
-}
-.sc-extension .player .pl-tabs {
-  float: right;
-  margin-right: 2px;
-  margin-top: -2px;
-}
-.sc-extension .player .pl-tabs i {
-  font-size: 30px;
 }
 .sc-extension .player input[type=range] {
   -webkit-appearance: none;
