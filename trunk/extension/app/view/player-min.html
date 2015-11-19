@@ -1,4 +1,4 @@
-<div class="player min-version">
+<div class="player min-version" ng-controller="PlayerController as playerController">
 	<div class="row">
 		<div class="col player-actions">
 			<div class="action-row">
@@ -7,7 +7,7 @@
 				</div>
 				<i class="material-icons" style="font-size: 22px;">replay</i>
 				<div class="pl-minimize">
-					<i class="material-icons" ng-click="changeView()">fullscreen_exit</i>
+					<i class="material-icons" ng-click="changePlayerView()">fullscreen</i>
 				</div>
 			</div>
 			<div class="action-row">

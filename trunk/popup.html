@@ -1,16 +1,19 @@
-<html class="sc-extension-html" ng-app="sound-cloud-player">
+<html class="sc-extension-html" ng-app="sound-cloud-player" ng-csp>
 	<head>
 		<script type="text/javascript" src="extension/lib/jquery.min.js"></script>
 		<script type="text/javascript" src="extension/lib/angular.min.js"></script>
-		<script type="text/javascript" src="extension/app/controller/app.js"></script>
+		<script type="text/javascript" src="extension/lib/angular-animate.min.js"></script>
+		<script type="text/javascript" src="extension/app/controller/init.js"></script>
+		<script type="text/javascript" src="extension/app/controller/viewController.js"></script>
 		<script type="text/javascript" src="extension/app/controller/playerController.js"></script>
 		<link rel="stylesheet" type="text/css" href="extension/style/theme.css" />
 		<link rel="stylesheet" type="text/css" href="extension/style/materialize-icons.css" />
 	</head>
 	
 	<body class="sc-extension">
-		<div ng-controller="playerController">
-			<div ng-include="typeView"></div>
+		<div ng-controller="ViewController">
+			<div ng-include="state.params.playerHtmlPath"></div>
+			<div ng-include="state.params.tabsHtmlPath"></div>
 		</div>
 	</body>
 </html>
