@@ -9,18 +9,27 @@
                 playerHtmlPath: '',
                 tabsHtmlPath: ''
             };
-            var test = 'asd';
+            
+            var soundState = {
+                soundName: '',
+                soundImg: '',
+                volume: 0,
+                position: 0
+            }
             
             return {
                 setViewState: function(state) {
                     viewState = state;
                 },
                 
+                setSoundState: function(state) {
+                    soundState = state;
+                },
+                
                 $get: function() {
                     function changePlayerMode() {
                        viewState.playerHtmlPath = viewState.isMinimized ? "/extension/app/view/player-max.html" : "/extension/app/view/player-min.html";
                        viewState.isMinimized = !viewState.isMinimized;
-                       test = 'qwe';
                     }
                     
                     function togleTabs() {
@@ -28,11 +37,28 @@
                        viewState.isTabsOpened = !viewState.isTabsOpened;
                     }
                     
+                    function updateSoundName(name) {
+                        soundState.soundName = name;
+                    }
+                    
+                    function updateVolume(level) {
+                        soundState.volume = level;
+                    }
+                    
+                    function updatePosition(position) {
+                        soundState.position = position;
+                    }
+                    
+                    function test() {
+                        console.log('test');
+                    }
+                    
                     return {
                         params: viewState,
-                        test: test,
+                        sound: soundState,
                         changePlayerMode: changePlayerMode,
-                        togleTabs: togleTabs
+                        togleTabs: togleTabs,
+                        updatePosition: updatePosition
                     };
                 }
             }
@@ -44,6 +70,13 @@
             isTabsOpened: false,
             playerHtmlPath: '/extension/app/view/player-max.html',
             tabsHtmlPath: ''
+        });
+        
+        $stateProvider.setSoundState({
+            soundName: '',
+            soundImg: '',
+            volume: 0,
+            position: 0
         });
     });
 })();
