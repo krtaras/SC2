@@ -49,4 +49,19 @@
 			}
 		}
 	});
+	app.config(function($playerProvider) {
+		var BG = chrome.extension.getBackgroundPage().BackGround;
+		if (BG.isInitialized()) {
+			$playerProvider.srtPlayerState(BG.getPlayerState());
+		} else {
+			$playerProvider.srtPlayerState({
+				isMinimazed: false,
+				isTabsOpened: false,
+				isRandomPlay: false,
+				playerHtmlPath: '/extension/app/view/player-max.html',
+				tabsHtmlPath: '',
+				volume: 0
+			});
+		}
+    });
 })();

@@ -6,7 +6,7 @@
     app.controller(controllerName, ["$scope", "$player", "$interval",
         function ViewController($scope, $player, $interval) {
             $scope.player = $player;
-            //BG.setStateProvider($player);
+            BG.setPlayerState($player);
             
             $scope.changePlayerViewMode = function() {
                 $scope.player.changePlayerViewMode();
