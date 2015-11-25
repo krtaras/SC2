@@ -7,7 +7,7 @@
 				</div>
 				<i class="material-icons" style="font-size: 22px;">replay</i>
 				<div class="pl-minimize">
-					<i class="material-icons" ng-click="changePlayerView()">fullscreen</i>
+					<i class="material-icons" ng-click="changePlayerViewMode()">fullscreen</i>
 				</div>
 			</div>
 			<div class="action-row">
@@ -19,7 +19,7 @@
 				</div>
 				<div class="pl-volume">		
 					<i class="material-icons">volume_up</i>
-					<input type="range">
+					<input ng-model="player.state.volume" min="0" max="100" type="range">
 				</div>
 			</div>
 		</div>

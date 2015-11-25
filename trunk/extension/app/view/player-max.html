@@ -9,7 +9,7 @@
 					Sound name...........................................
 				</div>
 				<div class="pl-minimize">
-					<i class="material-icons" ng-click="changePlayerView()">fullscreen_exit</i>
+					<i class="material-icons" ng-click="changePlayerViewMode()">fullscreen_exit</i>
 				</div>
 			</div>
 			<div class="action-row">
@@ -22,7 +22,7 @@
 				</div>
 				<div class="pl-volume">		
 					<i class="material-icons">volume_up</i>
-					<input type="range">
+					<input ng-model="player.state.volume" min="0" max="100" type="range">
 				</div>
 				<div class="pl-repeat">
 					<i class="material-icons">repeat</i>
@@ -34,7 +34,7 @@
 					<label>999.999</label>
 				</div>
 				<div class="pl-tabs">
-					<i class="material-icons" ng-click="togleTabs()">apps</i>
+					<i class="material-icons" ng-click="toggleTabs()">apps</i>
 				</div>
 			</div>
 		</div>

@@ -3,23 +3,21 @@
     var app = angular.module('sound-cloud-player');
     var controllerName = 'ViewController';
     var BG = chrome.extension.getBackgroundPage().BackGround;
-    app.controller(controllerName, ["$scope", "$state", "$interval",
-        function ViewController($scope, $state, $interval) {
-            $scope.state = $state;
-            BG.setStateProvider($state);
+    app.controller(controllerName, ["$scope", "$player", "$interval",
+        function ViewController($scope, $player, $interval) {
+            $scope.player = $player;
+            //BG.setStateProvider($player);
             
-            $scope.changePlayerView = function() {
-                $scope.state.changePlayerMode();
-                console.log('cpv');
+            $scope.changePlayerViewMode = function() {
+                $scope.player.changePlayerViewMode();
             }
             
-            $scope.togleTabs = function() {
-                $scope.state.togleTabs();
-                console.log('tt');
+            $scope.toggleTabs = function() {
+                $scope.player.toggleTabs();
             }
             
             $interval(function() {
-               $scope.state = $state;
+               $scope.player = $player;
             }, 500);
         }
     ]);

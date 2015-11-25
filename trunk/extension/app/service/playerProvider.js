@@ -8,7 +8,7 @@
 			isMinimazed: false,
 			isTabsOpened: false,
 			isRandomPlay: false,
-			playerHtmlPath: '',
+			playerHtmlPath: '/extension/app/view/player-max.html',
             tabsHtmlPath: '',
 			volume: 0
 		}

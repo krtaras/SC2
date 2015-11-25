@@ -3,7 +3,7 @@
 		<script type="text/javascript" src="extension/lib/jquery.min.js"></script>
 		<script type="text/javascript" src="extension/lib/angular.min.js"></script>
 		<script type="text/javascript" src="extension/app/app.js"></script>
-		<script type="text/javascript" src="extension/app/service/stateProvider.js"></script>
+		<script type="text/javascript" src="extension/app/service/playerProvider.js"></script>
 		<script type="text/javascript" src="extension/app/controller/viewController.js"></script>
 		<script type="text/javascript" src="extension/app/controller/playerController.js"></script>
 		<link rel="stylesheet" type="text/css" href="extension/style/theme.css" />
@@ -12,9 +12,8 @@
 	
 	<body class="sc-extension">
 		<div ng-controller="ViewController">
-			{{state.sound.position}}
-			<div ng-include="state.params.playerHtmlPath"></div>
-			<div ng-include="state.params.tabsHtmlPath"></div>
+			<div ng-include="player.state.playerHtmlPath"></div>
+			<div ng-include="player.state.tabsHtmlPath"></div>
 		</div>
 	</body>
 </html>
