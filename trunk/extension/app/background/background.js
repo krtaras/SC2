@@ -15,12 +15,17 @@ var SCPlayer;
 	var index = 0;
 	
 	this.setPlayerState = function(provider) {
-		playerState = provider;
-		isInitialized = true;
-		SCPlayer.on('time', function() {
-			console.log(playerState.state.volume);
-			SCPlayer.setVolume(playerState.state.volume / 100.0);
-		});
+		try {
+			playerState = provider;
+			isInitialized = true;
+			SCPlayer.on('time', function() {
+				console.log(playerState.state.volume);
+				SCPlayer.setVolume(playerState.state.volume / 100.0);
+			});
+		} catch (e) {
+			
+		}
+		
 	}
 	
 	this.isInitialized = function() {
