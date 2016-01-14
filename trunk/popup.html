@@ -3,22 +3,25 @@
 		<script type="text/javascript" src="extension/lib/jquery.min.js"></script>
 		<script type="text/javascript" src="extension/lib/angular.min.js"></script>
 		<script type="text/javascript" src="extension/app/app.js"></script>
-		<script type="text/javascript" src="extension/app/service/playerProvider.js"></script>
+        <script type="text/javascript" src="extension/app/controller/stateController.js"></script>
+        <script type="text/javascript" src="extension/app/service/playerProvider.js"></script>
 		<script type="text/javascript" src="extension/app/controller/loginController.js"></script>
 		<script type="text/javascript" src="extension/app/controller/playerController.js"></script>
 		<link rel="stylesheet" type="text/css" href="extension/style/theme.css" />
 		<link rel="stylesheet" type="text/css" href="extension/style/materialize-icons.css" />
 	</head>
 	
-	<body class="sc-extension" ng-controller="LoginController as lgController">
-		<!--
-		<div ng-show="lgController.isLoginned" ng-controller="PlayerController">
+	<body class="sc-extension" ng-controller="StateController">
+       {{isLoginned}}
+        <div ng-hide="isLoginned" class="ng-hide">
+            Test!
+        </div>
+		<!--<div ng-show="stateController.isLoginned()" ng-controller="PlayerController">
 			<div ng-include="player.state.playerHtmlPath"></div>
 			<div ng-include="player.state.tabsHtmlPath"></div>
 		</div> 
-		-->
-		<div ng-hide="lgController.isLoginned">
+		<div ng-hide="!stateController.isLoginned()">
 			<div ng-include="lgController.loginPage"></div>
-		</div>
+		</div> -->
 	</body>
 </html>
