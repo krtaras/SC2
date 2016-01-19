@@ -12,16 +12,11 @@
 	</head>
 	
 	<body class="sc-extension" ng-controller="StateController">
-       {{isLoginned}}
-        <div ng-hide="isLoginned" class="ng-hide">
-            Test!
-        </div>
-		<!--<div ng-show="stateController.isLoginned()" ng-controller="PlayerController">
-			<div ng-include="player.state.playerHtmlPath"></div>
-			<div ng-include="player.state.tabsHtmlPath"></div>
+		<div ng-class="{'hidden':!currentUser.state.isLoginned}" >
+			<div ng-include="playerPage"></div>
 		</div> 
-		<div ng-hide="!stateController.isLoginned()">
-			<div ng-include="lgController.loginPage"></div>
-		</div> -->
+		<div ng-class="{'hidden':currentUser.state.isLoginned}">
+			<div ng-include="loginPage"></div>
+		</div>
 	</body>
 </html>

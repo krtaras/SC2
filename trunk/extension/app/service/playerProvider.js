@@ -51,8 +51,8 @@
 	});
 	app.config(function($playerProvider) {
 		var BG = chrome.extension.getBackgroundPage().BackGround;
-		if (BG.isInitialized()) {
-			$playerProvider.srtPlayerState(BG.getPlayerState());
+		if (false) {
+		//	$playerProvider.srtPlayerState(BG.getPlayerState());
 		} else {
 			$playerProvider.srtPlayerState({
 				isMinimazed: false,
