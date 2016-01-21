@@ -21,7 +21,10 @@
 					<i class="material-icons" style="font-size: 22px; margin-top: 4px; margin-left: 4px;">replay</i>
 				</div>
 				<div class="pl-volume">		
-					<i class="material-icons">volume_up</i>
+					<i ng-class="player.state.volume <= 50 ? 'hidden' : ''" class="material-icons">volume_up</i>
+                    <i ng-class="(player.state.volume > 50 || player.state.volume ==0) ? 'hidden' : ''" class="material-icons">volume_down</i>
+                    <i ng-class="player.state.volume != 0 ? 'hidden' : ''" class="material-icons">volume_mute</i>
+                    <i ng-class="player.state.volume >=0 ? 'hidden' : ''" class="material-icons">volume_off</i>
 					<input ng-model="player.state.volume" min="0" max="100" type="range">
 				</div>
 				<div class="pl-repeat">
