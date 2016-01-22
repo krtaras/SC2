@@ -18,7 +18,7 @@
 					<i class="material-icons">fast_forward</i>
 				</div>
 				<div class="pl-volume">		
-					<i class="material-icons">volume_up</i>
+					<i class="material-icons" ng-click="muteVolume()">{{volumeIcon}}</i>
 					<input ng-model="player.state.volume" min="0" max="100" type="range">
 				</div>
 			</div>

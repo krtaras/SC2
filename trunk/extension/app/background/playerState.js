@@ -6,6 +6,7 @@
     }
     var isMinimized = false;
     var isTabsOpened = false;
+    var isMute = false;
     var volume = 0;
     
     function PlayerState() {
@@ -34,6 +35,10 @@
         volume = value;
         updateState.call(this);
     }
+    PlayerState.prototype.toggleMute = function() {
+        isMute = !isMute;
+        updateState.call(this);
+    }
     
     function updateState() {
         var ps = this;
@@ -44,7 +49,8 @@
             isTabsOpened:isTabsOpened,
             viewURL:viewURL,
             tabsURL:tabsURL,
-            volume:volume
+            volume:volume,
+            isMute:isMute
         }
         ps.state = playerState;
     }
