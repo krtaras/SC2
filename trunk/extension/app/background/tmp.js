@@ -1,4 +1,4 @@
-SC.initialize({
+    SC.initialize({
 		client_id: 'c0e833fecbe9557b9ba8e676b4786b3a'
 	});
 	

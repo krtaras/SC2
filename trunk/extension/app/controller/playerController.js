@@ -3,12 +3,14 @@
     var app = angular.module('sound-cloud-player');
     var controllerName = 'PlayerController';
     var BG = chrome.extension.getBackgroundPage().BackGround;
-    app.controller(controllerName, ["$scope", "$interval",
-        function PlayerController($scope, $interval) {
-            $scope.player = BG.playerState;
-            $scope.volumeIcon = "";
+    app.controller(controllerName, ["$interval",
+        function PlayerController($interval) {
+            var pc = this;
             
-            $scope.changePlayerViewMode = function() {
+            this.player = BG.playerState;
+            this.volumeIcon = "";
+            
+            this.changePlayerViewMode = function() {
                 if (BG.playerState.state.isMinimized) {
                     BG.playerState.maximize();
                 } else {
@@ -16,7 +18,7 @@
                 }
             }
             
-            $scope.toggleTabs = function() {
+            this.toggleTabs = function() {
                 if (BG.playerState.state.isTabsOpened) {
                     BG.playerState.closeTabs();
                 } else {
@@ -24,27 +26,35 @@
                 }
             }
             
-            $scope.muteVolume = function() {
+            this.muteVolume = function() {
                  BG.playerState.toggleMute();
                  updateVolumeIcon();
             }
             
-            $scope.$watch("player.state.volume", function() {
+            this.updateVolume = function() {
                  BG.playerState.setVolume(BG.playerState.state.volume);
                  updateVolumeIcon();
-            });
+            };
+            
+            this.play = function() {
+                BG.soundManager.play();
+            }
+            
+            this.stop = function() {
+                BG.soundManager.stop();
+            }
             
             function updateVolumeIcon() {
                 if (BG.playerState.state.isMute) {
-                    $scope.volumeIcon = "volume_off";
+                    pc.volumeIcon = "volume_off";
                 } else {
                     if (BG.playerState.state.volume > 50) {
-                         $scope.volumeIcon = "volume_up";
+                         pc.volumeIcon = "volume_up";
                     } else {
                         if (BG.playerState.state.volume == 0) {
-                             $scope.volumeIcon = "volume_mute";
+                             pc.volumeIcon = "volume_mute";
                         } else {
-                             $scope.volumeIcon = "volume_down";
+                             pc.volumeIcon = "volume_down";
                         }
                     }
                 }

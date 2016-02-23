@@ -6,23 +6,23 @@
 		<div class="col player-actions">
 			<div class="action-row">
 				<div class="pl-title">
-					{{player.state.volume}} Sound name...........................................
+					{{playerController.player.state.volume}} Sound name...........................................
 				</div>
 				<div class="pl-minimize">
-					<i class="material-icons" ng-click="changePlayerViewMode()">fullscreen_exit</i>
+					<i class="material-icons" ng-click="playerController.changePlayerViewMode()">fullscreen_exit</i>
 				</div>
 			</div>
 			<div class="action-row">
 				<div class="pl-buttons">
 					<i class="material-icons">fast_rewind</i>
-					<i class="material-icons">stop</i>
-					<i class="material-icons">play_arrow</i>
+					<i class="material-icons" ng-click="playerController.stop()">stop</i>
+					<i class="material-icons" ng-click="playerController.play()">play_arrow</i>
 					<i class="material-icons">fast_forward</i>
 					<i class="material-icons" style="font-size: 22px; margin-top: 4px; margin-left: 4px;">replay</i>
 				</div>
 				<div class="pl-volume">		
-                    <i class="material-icons" ng-click="muteVolume()">{{volumeIcon}}</i>
-					<input ng-model="player.state.volume" min="0" max="100" type="range">
+                    <i class="material-icons" ng-click="playerController.muteVolume()">{{volumeIcon}}</i>
+					<input ng-model="playerController.player.state.volume" ng-change="playerController.updateVolume()" min="0" max="100" type="range">
 				</div>
 				<div class="pl-repeat">
 					<i class="material-icons">repeat</i>
@@ -34,7 +34,7 @@
 					<label>999.999</label>
 				</div>
 				<div class="pl-tabs">
-					<i class="material-icons" ng-click="toggleTabs()">apps</i>
+					<i class="material-icons" ng-click="playerController.toggleTabs()">apps</i>
 				</div>
 			</div>
 		</div>
