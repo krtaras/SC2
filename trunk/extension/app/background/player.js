@@ -1,5 +1,6 @@
-var Player = new (function () {
-	soundManager.setup({
+var Player = (function () {
+	
+    soundManager.setup({
 		url: '/app/lib/',
 		flashVersion: 9,
 		onready: function () {
@@ -8,86 +9,72 @@ var Player = new (function () {
 	
 	var playingSound;
 	
-	this.state = {
-		sound: {
+	function Player() {
+        
+        this.volume = 50;
+        this.isMute = false;
+        this.isRandom = false;
+        this.onPause = false,
+        
+		this.sound = {
 			id: -1,
 			title: "",
 			duration: 1000,
 			position: 0
-		},
-		player: {
-			onPause: false,
-			volume: 50,
-			isRandom: false,
-			isLoop: true,
-			isMute: false
-		},
-		playlist: {
+		};
+
+		this.playlist = {
 			id: -1,
 			name: "",
-			count: 0,
-			offset: 0,
 			index: 0,
-			maxCount: 0,
-			items:[]
-		},
-		customProperty: {
+			sounds:[]
+		};
+        
+		this.customProperty = {
 			
 		}
-	}
+	};
 
-	this.setPlayList = function(id, name, count, offset, maxCount, sounds) {
-		if (offset == 0) {
-			Player.state.playlist.items = sounds;
-			Player.state.playlist.index = 0;
+	Player.prototype.setPlayList = function(id, name, sounds, firstPage) {
+		if (firstPage) {
+            this.playlist.id = id;
+		    this.playlist.name = name;
+            this.playlist.index = 0;
+			this.playlist.sounds = sounds;
 		} else {
-			Player.state.playlist.items.push(sounds);
+			this.playlist.sounds.push(sounds);
 		}
-		Player.state.playlist.id = id;
-		Player.state.playlist.name = name;
-		Player.state.playlist.count = count;
-		Player.state.playlist.maxCount = maxCount;
-		Player.state.playlist.offset = offset;
 	}
 	
-	this.playSoundById = function(soundId) {
-		Player.state.playlist.index = -1;
-		for (var i in Player.state.playlist.items) {
-			if (Player.state.playlist.items[i].id == soundId) {
-				Player.state.playlist.index = i;
+	Player.prototype.playSoundById = function(soundId) {
+		this.playlist.index = -1;
+		for (var i in this.playlist.sounds) {
+			if (this.playlist.sounds[i].id == soundId) {
+				this.playlist.index = i;
 				break;
 			}
 		}
-		doPlay();
-	}
-	
-	this.playSoundByIndex = function(index, offset) {
-		Player.state.playlist.index = -1;
-		var sound = Player.state.playlist.items[index+offset];
-		if (typeof sound !== "undefined") {
-			Player.state.playlist.index = index+offset;
-		}
-		doPlay();
+		doPlay.call(this);
 	}
 
-	this.play = function () {
-		doPlay();
+	Player.prototype.play = function () {
+		doPlay.call(this);
 	}
 
-	this.next = function () {
-		doNext();
+	Player.prototype.next = function () {
+		doNext.call(this);
 	}
 
-	this.prev = function () {
-		doPrev();
+	Player.prototype.prev = function () {
+		doPrev.call(this);
 	}
 
-	this.stop = function () {
-		doStop();
+	Player.prototype.stop = function () {
+		doStop.call(this);
 	}
 
-	this.toggle = function () {
-		doToggle();
+	Player.prototype.toggle = function () {
+		doToggle.call(this);
 	}
 
 	this.setPosition = function(position) {
@@ -97,46 +84,46 @@ var Player = new (function () {
 	}
 	
 	this.setVolume = function(volume) {
-		Player.state.player.volume = volume;
+		this.player.volume = volume;
 		if (typeof playingSound !== "undefined") {
-			playingSound.setVolume(Player.state.player.volume);
+			playingSound.setVolume(this.player.volume);
 		}
 	}
 
 	this.setRandomPlaying = function(isRandom) {
-		Player.state.player.isRandom = isRandom;
+		this.player.isRandom = isRandom;
 	}
 
 	this.mute = function() {
-		Player.state.player.isMute = !Player.state.player.isMute;
-		if (Player.state.player.isMute) {
+		this.player.isMute = !this.player.isMute;
+		if (this.player.isMute) {
 			playingSound.setVolume(0);
 		} else {
-			playingSound.setVolume(Player.state.player.volume);
+			playingSound.setVolume(this.player.volume);
 		}
 	}
 	
 	var doPlay = function () {
 		doStop();
-		var sound = Player.state.playlist.items[Player.state.playlist.index];
+		var sound = this.playlist.items[this.playlist.index];
 		playingSound = soundManager.createSound({
 			url: sound.url,
 			onPlay: function() {
-				Player.state.sound.id = sound.id;
+				Player.sound.id = sound.id;
 			},
 			onload: function () {
-				Player.state.sound.title = sound.title;
-				Player.state.sound.duration = playingSound.duration;
-				Player.state.player.onPause = false;
+				Player.sound.title = sound.title;
+				Player.sound.duration = playingSound.duration;
+				this.player.onPause = false;
 			},
 			onfinish: function () {
 				doNext();
 			},
 			whileplaying: function () {
-				Player.state.sound.position = playingSound.position;
+				Player.sound.position = playingSound.position;
 			}
 		});
-		playingSound.setVolume(Player.state.player.volume);
+		playingSound.setVolume(this.player.volume);
 		playingSound.play();
 	}
 
@@ -147,25 +134,25 @@ var Player = new (function () {
 	}
 	
 	var doNext = function () {
-		var next = Player.state.playlist.index + 1;
-		if (next >= Player.state.playlist.items.length) {
-			if (Player.state.player.isLoop) {
-				Player.state.playlist.index = 0;
+		var next = this.playlist.index + 1;
+		if (next >= this.playlist.items.length) {
+			if (this.player.isLoop) {
+				this.playlist.index = 0;
 			}
 		} else {
-			Player.state.playlist.index = next;
+			this.playlist.index = next;
 		}
 		doPlay();
 	}
 
 	var doPrev = function () {
-		var prev = Player.state.playlist.index - 1;
+		var prev = this.playlist.index - 1;
 		if (prev < 0) {
-			if (Player.state.player.isLoop) {
-				Player.state.playlist.index = Player.state.playlist.items.length - 1;
+			if (this.player.isLoop) {
+				this.playlist.index = this.playlist.items.length - 1;
 			}
 		} else {
-			Player.state.playlist.index = prev;
+			this.playlist.index = prev;
 		}
 		doPlay();
 	}
@@ -173,11 +160,11 @@ var Player = new (function () {
 	var doToggle = function () {
 		if (typeof playingSound !== "undefined") {
 			playingSound.togglePause();
-			Player.state.player.onPause = playingSound.paused;
+			this.player.onPause = playingSound.paused;
 		}
 	}
 })();
-Player.state.customProperty = {
+Player.customProperty = {
 	isOpenedPlayList:true,
 	openTab: "my"
 };
