@@ -6,52 +6,72 @@
     app.controller(controllerName, ["$interval",
         function PlayerController($interval) {
             var pc = this;
-            
-            this.player = BG.playerState;
+
+            this.player = BG.playerService;
             this.volumeIcon = "";
             
             this.changePlayerViewMode = function() {
-                if (BG.playerState.state.isMinimized) {
-                    BG.playerState.maximize();
+                if (BG.playerService.view.isMinimized) {
+                    BG.playerService.maximize();
                 } else {
-                    BG.playerState.minimize();
+                    BG.playerService.minimize();
                 }
             }
             
             this.toggleTabs = function() {
-                if (BG.playerState.state.isTabsOpened) {
-                    BG.playerState.closeTabs();
+                if (BG.playerService.view.isTabsOpened) {
+                    BG.playerService.closeTabs();
                 } else {
-                    BG.playerState.openTabs();
+                    BG.playerService.openTabs();
                 }
             }
             
             this.muteVolume = function() {
-                 BG.playerState.toggleMute();
+                 BG.playerService.toggleMute();
                  updateVolumeIcon();
             }
             
             this.updateVolume = function() {
-                 BG.playerState.setVolume(BG.playerState.state.volume);
+                 BG.playerService.setVolume(BG.playerService.state.volume);
                  updateVolumeIcon();
             };
             
+            this.updatePosition = function() {
+                BG.playerService.setPosition(BG.playerService.sound.position);
+            }
+            
             this.play = function() {
-                BG.soundManager.play();
+                BG.playerService.play();
             }
             
             this.stop = function() {
-                BG.soundManager.stop();
+                BG.playerService.stop();
+            }
+            
+            this.toggle = function() {
+                BG.playerService.togglePause();
+            }
+            
+            this.next = function() {
+                BG.playerService.next();
+            }
+            
+            this.prev = function() {
+                BG.playerService.prev();
+            }
+            
+            this.replay = function() {
+                BG.playerService.replay();
             }
             
             function updateVolumeIcon() {
-                if (BG.playerState.state.isMute) {
+                if (BG.playerService.state.isMute) {
                     pc.volumeIcon = "volume_off";
                 } else {
-                    if (BG.playerState.state.volume > 50) {
+                    if (BG.playerService.state.volume > 50) {
                          pc.volumeIcon = "volume_up";
                     } else {
-                        if (BG.playerState.state.volume == 0) {
+                        if (BG.playerService.state.volume == 0) {
                              pc.volumeIcon = "volume_mute";
                         } else {
                              pc.volumeIcon = "volume_down";

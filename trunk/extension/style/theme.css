@@ -82,6 +82,7 @@
 .sc-extension .player.full-version .pl-navigate {
   float: left;
   margin-left: 5px;
+  width: 245px;
 }
 .sc-extension .player.full-version .pl-navigate label {
   color: white;

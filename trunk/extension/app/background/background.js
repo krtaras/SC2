@@ -2,8 +2,7 @@
 	
     function BackGroundController() {
         this.currentUser = new CurrentUser();
-        this.playerState = new PlayerState();
-        this.soundManager = new SoundManager();
+        this.playerService = new PlayerService();
     }
 	
     return BackGroundController;

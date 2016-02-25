@@ -6,7 +6,7 @@
 		<div class="col player-actions">
 			<div class="action-row">
 				<div class="pl-title">
-					{{playerController.player.state.volume}} Sound name...........................................
+					{{playerController.player.sound.title}}
 				</div>
 				<div class="pl-minimize">
 					<i class="material-icons" ng-click="playerController.changePlayerViewMode()">fullscreen_exit</i>
@@ -14,11 +14,11 @@
 			</div>
 			<div class="action-row">
 				<div class="pl-buttons">
-					<i class="material-icons">fast_rewind</i>
+					<i class="material-icons" ng-click="playerController.prev()">fast_rewind</i>
 					<i class="material-icons" ng-click="playerController.stop()">stop</i>
 					<i class="material-icons" ng-click="playerController.play()">play_arrow</i>
-					<i class="material-icons">fast_forward</i>
-					<i class="material-icons" style="font-size: 22px; margin-top: 4px; margin-left: 4px;">replay</i>
+					<i class="material-icons" ng-click="playerController.next()">fast_forward</i>
+					<i class="material-icons" style="font-size: 22px; margin-top: 4px; margin-left: 4px;" ng-click="playerController.replay()">replay</i>
 				</div>
 				<div class="pl-volume">		
                     <i class="material-icons" ng-click="playerController.muteVolume()">{{playerController.volumeIcon}}</i>
@@ -30,8 +30,8 @@
 			</div>
 			<div class="action-row">
 				<div class="pl-navigate">
-					<input type="range">
-					<label>999.999</label>
+					<input type="range" ng-model="playerController.player.sound.position" ng-change="playerController.updatePosition()" nim="0" max="{{playerController.player.sound.duration}}">
+					<label>{{playerController.player.sound.position | date:'mm:ss'}}</label>
 				</div>
 				<div class="pl-tabs">
 					<i class="material-icons" ng-click="playerController.toggleTabs()">apps</i>

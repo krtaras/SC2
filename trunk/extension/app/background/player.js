@@ -1,4 +1,4 @@
-var Player = (function () {
+;var Player = (function () {
 	
     soundManager.setup({
 		url: '/app/lib/',
@@ -8,26 +8,37 @@ var Player = (function () {
 	});
 	
 	var playingSound;
-	
-	function Player() {
-        
-        this.volume = 50;
-        this.isMute = false;
-        this.isRandom = false;
-        this.onPause = false,
-        
-		this.sound = {
-			id: -1,
-			title: "",
-			duration: 1000,
-			position: 0
-		};
-
-		this.playlist = {
+	var playList;
+    
+    function Playlist() {
+        return {
 			id: -1,
 			name: "",
 			index: 0,
 			sounds:[]
+		};
+    }
+    
+	function Player() {
+        
+        this.state = {
+            volume:  50,
+            isMute:  false,
+            isRandom:  false,
+            onPause:  false,
+            loadingSound:  false
+        }
+        
+		this.sound = {
+			id: -1,
+            loading: false,
+			title: ".........",
+			duration: 1000,
+			position: 0,
+            dynamicURL: false,
+            url: "",
+            playMe: function() {
+            }
 		};
         
 		this.customProperty = {
@@ -37,20 +48,21 @@ var Player = (function () {
 
 	Player.prototype.setPlayList = function(id, name, sounds, firstPage) {
 		if (firstPage) {
-            this.playlist.id = id;
-		    this.playlist.name = name;
-            this.playlist.index = 0;
-			this.playlist.sounds = sounds;
+            playList = new Playlist();
+            playList.id = id;
+		    playList.name = name;
+            playList.index = 0;
+			playList.sounds = sounds;
 		} else {
-			this.playlist.sounds.push(sounds);
+			playList.sounds.push(sounds);
 		}
 	}
 	
 	Player.prototype.playSoundById = function(soundId) {
-		this.playlist.index = -1;
-		for (var i in this.playlist.sounds) {
-			if (this.playlist.sounds[i].id == soundId) {
-				this.playlist.index = i;
+		playList.index = -1;
+		for (var i in playList.sounds) {
+			if (playList.sounds[i].id == soundId) {
+				playList.index = i;
 				break;
 			}
 		}
@@ -77,55 +89,80 @@ var Player = (function () {
 		doToggle.call(this);
 	}
 
-	this.setPosition = function(position) {
+	Player.prototype.setPosition = function(position) {
 		if (typeof playingSound !== "undefined") {
 			playingSound.setPosition(position);
 		}
 	}
 	
-	this.setVolume = function(volume) {
-		this.player.volume = volume;
+	Player.prototype.setVolume = function(volume) {
+		this.state.volume = volume;
 		if (typeof playingSound !== "undefined") {
-			playingSound.setVolume(this.player.volume);
+			playingSound.setVolume(this.state.volume);
 		}
 	}
 
-	this.setRandomPlaying = function(isRandom) {
-		this.player.isRandom = isRandom;
+	Player.prototype.setRandomPlaying = function() {
+		this.state.isRandom = true;
+	}
+    
+    Player.prototype.setLoopPlaying = function() {
+		this.state.isRandom = false;
 	}
 
-	this.mute = function() {
-		this.player.isMute = !this.player.isMute;
-		if (this.player.isMute) {
+	Player.prototype.mute = function() {
+		this.state.isMute = !this.state.isMute;
+		if (this.state.isMute) {
 			playingSound.setVolume(0);
 		} else {
-			playingSound.setVolume(this.player.volume);
+			playingSound.setVolume(this.state.volume);
 		}
 	}
 	
 	var doPlay = function () {
-		doStop();
-		var sound = this.playlist.items[this.playlist.index];
-		playingSound = soundManager.createSound({
+        var player = this;
+		doStop.call(player);
+        console.log(player.loadingSound);
+		var sound = playList.sounds[playList.index];
+        if(sound.dynamicURL) {
+            sound.playMe(function(url) {
+                sound.url = url;
+                createCurrentSound.call(player, sound);
+            });
+        } else {
+            createCurrentSound.call(player, sound);
+        }
+	}
+
+    var createCurrentSound = function(sound) {
+        var player = this;
+        playingSound = soundManager.createSound({
 			url: sound.url,
 			onPlay: function() {
-				Player.sound.id = sound.id;
+				player.sound.id = sound.id;
+                player.loadingSound = true;
 			},
 			onload: function () {
-				Player.sound.title = sound.title;
-				Player.sound.duration = playingSound.duration;
-				this.player.onPause = false;
+				player.sound.title = sound.title;
+				player.sound.duration = playingSound.duration;
+				player.onPause = false;
+                player.loadingSound = false;
+                console.log(player.loadingSound);
 			},
 			onfinish: function () {
-				doNext();
+				doNext.call(player);
 			},
 			whileplaying: function () {
-				Player.sound.position = playingSound.position;
+				player.sound.position = playingSound.position;
 			}
 		});
-		playingSound.setVolume(this.player.volume);
+        var volume = 0;
+        if (!player.state.isMute) {
+            volume = player.state.volume;
+        }
+		playingSound.setVolume(volume);
 		playingSound.play();
-	}
+    }
 
 	var doStop = function () {
 		if (typeof playingSound !== "undefined") {
@@ -134,37 +171,40 @@ var Player = (function () {
 	}
 	
 	var doNext = function () {
-		var next = this.playlist.index + 1;
-		if (next >= this.playlist.items.length) {
-			if (this.player.isLoop) {
-				this.playlist.index = 0;
-			}
+        var player = this;
+		var next = playList.index + 1;
+        if (player.state.isRandom) {
+            next = 0; //random
+        }    
+		if (next >= playList.sounds.length) {
+			playList.index = 0;
 		} else {
-			this.playlist.index = next;
+			playList.index = next;
 		}
-		doPlay();
+		doPlay.call(player);
 	}
 
 	var doPrev = function () {
-		var prev = this.playlist.index - 1;
+        var player = this;
+		var prev = playList.index - 1;
+        if (player.state.isRandom) {
+            next = 0; //random
+        }   
 		if (prev < 0) {
-			if (this.player.isLoop) {
-				this.playlist.index = this.playlist.items.length - 1;
-			}
+			playList.index = playList.sounds.length - 1;
 		} else {
-			this.playlist.index = prev;
+			playList.index = prev;
 		}
-		doPlay();
+		doPlay.call(player);
 	}
 	
 	var doToggle = function () {
+        var player = this;
 		if (typeof playingSound !== "undefined") {
 			playingSound.togglePause();
-			this.player.onPause = playingSound.paused;
+			player.state.onPause = playingSound.paused;
 		}
 	}
+    
+    return Player;
 })();
-Player.customProperty = {
-	isOpenedPlayList:true,
-	openTab: "my"
-};
