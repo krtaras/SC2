@@ -20,6 +20,7 @@
         };
         this.state = SCPlayer.state;
         this.sound = SCPlayer.sound;
+        this.items = [];
         updateState.call(this);
     };
     
@@ -51,22 +52,6 @@
         SCPlayer.mute();
     }
     PlayerService.prototype.play = function() {
-        var sounds = [];
-        sounds.push({
-            id: 65257361,
-            title: "Test",
-            duration: 1000,
-            position: 0,
-            dynamicURL: true,
-            url: "",
-            playMe: function(calback) {
-                    apiHelper.getTrackURL(this.id, function(url) {
-                        console.log(url);
-                        calback(url);
-                    });
-            }
-        });
-        SCPlayer.setPlayList(-1, 'test', sounds, true);
         SCPlayer.play();
     }
     PlayerService.prototype.stop = function() {
@@ -110,8 +95,10 @@
                 });
             }
             callback(sounds);
+            SCPlayer.setPlayList(-1, 'test', sounds, true);
         });
     }
+    PlayerService.prototype.getCurrent
     
     function updateState() {
         var ps = this;
