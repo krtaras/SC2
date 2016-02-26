@@ -87,6 +87,31 @@
     PlayerService.prototype.replay = function() {
         SCPlayer.play();
     }
+    PlayerService.prototype.getTracks = function(str, callback) {
+        apiHelper.searchSounds(str, function(result) {
+            console.log(result);
+            var sounds = []
+            for (var i in result) {
+                sounds.push({
+                    id: result[i].id,
+                    loading: false,
+                    title: result[i].title,
+                    art: result[i].artwork_url,
+                    duration: result[i].duration,
+                    position: 0,
+                    dynamicURL: true,
+                    url: "",
+                    playMe: function(calback) {
+                        apiHelper.getTrackURL(this.id, function(url) {
+                            console.log(url);
+                            calback(url);
+                        });
+                    }
+                });
+            }
+            callback(sounds);
+        });
+    }
     
     function updateState() {
         var ps = this;

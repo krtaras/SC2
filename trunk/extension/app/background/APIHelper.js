@@ -9,7 +9,9 @@
     }
     
     APIHelper.prototype.searchSounds = function(searchStr, callback) {
-        
+        callAPI('/tracks', {q:searchStr, limit:200}, function(data) {
+            callback(data);
+        });
     }
     
     APIHelper.prototype.getMyPlaylists = function(callback) {
@@ -23,7 +25,7 @@
     }
     
     function callAPI(str, params, callback) {
-        SC.get(str).then(callback);
+        SC.get(str, params).then(callback);
     }
     
     return APIHelper;

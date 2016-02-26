@@ -8,7 +8,6 @@
             $scope.currentUser = BG.currentUser;            
             $scope.loginPage = '/extension/app/view/login.html';
             $scope.playerPage = '/extension/app/view/player.html';
-            
         }
     ]);
 })();

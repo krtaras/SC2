@@ -1,0 +1,23 @@
+<div>
+    <div class="action-box">
+        <input class="search" type="search" />
+        <a href="#" class="btn" style="float: left;" ng-click="tabsController.search()">Search</a>
+        <a href="#" class="btn" style="float: right; width: 100px;">Stream</a>
+    </div>
+    <div class="list">
+        
+        <div class="sound" ng-repeat="sound in tabsController.list">
+            <div class="image" style="background-image: url('{{sound.art}}')"></div>
+            <div class="title">{{sound.title}}</div>
+            <div class="actions">
+                <i class="material-icons">favorite_border</i>
+                <i class="material-icons">play_arrow</i>
+                <i class="material-icons">file_download</i>
+            </div>
+        </div>
+        
+        <div class="playlist">
+            
+        </div>
+    </div>
+</div>

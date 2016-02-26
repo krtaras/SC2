@@ -1,5 +1,10 @@
-<div>
-	<div>Tab_1</div>
-	<div>Tab_2</div>
-	<div>Tab_3</div>
+<div class="tabs" id="tabsController" ng-controller="TabsController as tabsController">
+    <div class="line"></div>
+    <div class="tb-buttons">
+        <div class="tb-btn active">Home</div>
+        <div class="tb-btn">Traks</div>
+        <div class="tb-btn">Playlists</div>
+        <div class="tb-btn">Settings</div>
+    </div>
+    <div ng-include="'/extension/app/view/homeTab.html'"></div>
 </div>

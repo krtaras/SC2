@@ -33,6 +33,7 @@
 			id: -1,
             loading: false,
 			title: ".........",
+            art: "",
 			duration: 1000,
 			position: 0,
             dynamicURL: false,
