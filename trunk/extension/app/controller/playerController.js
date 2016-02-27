@@ -7,8 +7,9 @@
     app.controller(controllerName, ["$interval",
         function PlayerController($interval) {
             var pc = this;
-
-            this.player = BG.playerService;
+            
+            this.state = BG.playerService;
+            this.player = Player;
             this.volumeIcon = "";
             
             this.changePlayerViewMode = function() {
@@ -28,12 +29,13 @@
             }
             
             this.muteVolume = function() {
-                 BG.playerService.toggleMute();
+                 Player.mute();
                  updateVolumeIcon();
             }
             
             this.updateVolume = function() {
-                 BG.playerService.setVolume(BG.playerService.state.volume);
+                 Player.setVolume(Player.state.volume);
+                 Player.state.isMute = false;
                  updateVolumeIcon();
             };
             
@@ -66,13 +68,13 @@
             }
             
             function updateVolumeIcon() {
-                if (BG.playerService.state.isMute) {
+                if (Player.state.isMute) {
                     pc.volumeIcon = "volume_off";
                 } else {
-                    if (BG.playerService.state.volume > 50) {
+                    if (Player.state.volume > 50) {
                          pc.volumeIcon = "volume_up";
                     } else {
-                        if (BG.playerService.state.volume == 0) {
+                        if (Player.state.volume == 0) {
                              pc.volumeIcon = "volume_mute";
                         } else {
                              pc.volumeIcon = "volume_down";

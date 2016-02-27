@@ -18,8 +18,6 @@
             viewURL: '/extension/app/view/player-max.html',
             tabsURL: ''
         };
-        this.state = SCPlayer.state;
-        this.sound = SCPlayer.sound;
         updateState.call(this);
     };
     
@@ -39,37 +37,6 @@
     PlayerService.prototype.closeTabs = function() {
         this.view.isTabsOpened = false;
         updateState.call(this);
-    }
-    PlayerService.prototype.setVolume = function(value) {
-        SCPlayer.setVolume(value);
-        SCPlayer.state.isMute = false;
-    }
-    PlayerService.prototype.setPosition = function(position) {
-        SCPlayer.setPosition(position);
-    }
-    PlayerService.prototype.toggleMute = function() {
-        SCPlayer.mute();
-    }
-    PlayerService.prototype.play = function() {
-        SCPlayer.play();
-    }
-    PlayerService.prototype.stop = function() {
-        SCPlayer.stop();
-    }
-    PlayerService.prototype.togglePause = function() {
-        SCPlayer.toggle();
-    }
-    PlayerService.prototype.setRandomPlay = function() {
-        SCPlayer.setRandomPlaying();
-    }
-    PlayerService.prototype.next = function() {
-        SCPlayer.next();
-    }
-    PlayerService.prototype.prev = function() {
-        SCPlayer.prev();
-    }
-    PlayerService.prototype.replay = function() {
-        SCPlayer.play();
     }
     
     function updateState() {
