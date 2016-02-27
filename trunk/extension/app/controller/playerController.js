@@ -2,6 +2,7 @@
     'use strict';
     var app = angular.module('sound-cloud-player');
     var controllerName = 'PlayerController';
+    var Player = chrome.extension.getBackgroundPage().SCPlayer;
     var BG = chrome.extension.getBackgroundPage().BackGround;
     app.controller(controllerName, ["$interval",
         function PlayerController($interval) {
@@ -37,31 +38,31 @@
             };
             
             this.updatePosition = function() {
-                BG.playerService.setPosition(BG.playerService.sound.position);
+                Player.setPosition(Player.sound.position);
             }
             
             this.play = function() {
-                BG.playerService.play();
+                Player.play();
             }
             
             this.stop = function() {
-                BG.playerService.stop();
+                Player.stop();
             }
             
             this.toggle = function() {
-                BG.playerService.togglePause();
+                Player.toggle();
             }
             
             this.next = function() {
-                BG.playerService.next();
+                Player.next();
             }
             
             this.prev = function() {
-                BG.playerService.prev();
+                Player.prev();
             }
             
             this.replay = function() {
-                BG.playerService.replay();
+                Player.play();
             }
             
             function updateVolumeIcon() {

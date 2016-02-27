@@ -5,9 +5,9 @@
         <a href="#" class="btn" style="float: right; width: 100px;">Stream</a>
     </div>
     <div class="list">
-        <div class="sound" ng-repeat="sound in tabsController.list">
-            <div class="image" style="background-image: url('{{sound.art}}')"></div>
-            <div class="title">{{sound.title}}</div>
+        <div class="sound" ng-class="(item.id == tabsController.sound.id) ? 'active' : '' " ng-repeat="item in tabsController.list">
+            <div class="image" style="background-image: url('{{item.art}}')"></div>
+            <div class="title">{{item.title}}</div>
             <div class="actions">
                 <i class="material-icons">favorite_border</i>
                 <i class="material-icons">play_arrow</i>

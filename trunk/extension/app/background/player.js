@@ -10,12 +10,6 @@
 	var playingSound;
 	var items;
     var itemIndex;
-    function Item() {
-        return {
-			type:'',
-            object:{}
-		};
-    }
     
 	function Player() {
         
@@ -28,6 +22,7 @@
         }
         
 		this.sound = {
+            type: 'sound',
 			id: -1,
             loading: false,
 			title: ".........",
@@ -41,6 +36,7 @@
 		};
         
         this.playList = {
+            type: 'playlist',
             id: -1,
             title: ".........",
             art: "",
@@ -68,11 +64,7 @@
 		} else {
 			this.playList.sounds.push(sounds);
 		}
-        var item = new Item();
-        item.type = 'pl';
-        item.object = this.playList;
-        items = [];
-        items.push(item);
+        items.push(this.playList);
 	}
 	
 	/*Player.prototype.playSoundById = function(soundId) {
@@ -136,8 +128,13 @@
 		}
 	}
 	
-    Player.prototype.getPlaylistSounds = function() {
-        return this.playList.sounds;
+    Player.prototype.getItemsList = function() {
+        if (items.length == 1) {
+            if (items[0].type == 'playlist') {
+                return items[0].sounds;
+            }
+        }
+        return items;
     }
     
 	var doPlay = function () {
@@ -157,14 +154,13 @@
 
     var getSound = function() {
         var player = this;
-        item = items[itemIndex];
-        if (item.type == 'pl') {
-            var pl = item.object;
-            if (pl.id == player.playList.id) {
+        var item = items[itemIndex];
+        if (item.type == 'playlist') {
+            if (item.id == player.playList.id) {
                 return player.playList.sounds[player.playList.index];
             }
         } else {
-            return item.object;
+            return item;
         }
     }
 
@@ -173,11 +169,12 @@
         playingSound = soundManager.createSound({
 			url: sound.url,
 			onPlay: function() {
-				player.sound.id = sound.id;
                 player.state.loadingSound = true;
 			},
 			onload: function () {
+                player.sound.id = sound.id;
 				player.sound.title = sound.title;
+                player.sound.art = sound.art;
 				player.sound.duration = playingSound.duration;
 				player.onPause = false;
                 player.state.loadingSound = false;
@@ -207,7 +204,7 @@
 	var doNext = function () {
         var player = this;
         var changeIndex = true;
-        if (items[itemIndex].type == 'pl') {
+        if (items[itemIndex].type == 'playlist') {
             var next = player.playList.index + 1; 
             if (next >= player.playList.sounds.length && items.length == 1) {
                 player.playList.index = 0;
@@ -236,7 +233,7 @@
 	var doPrev = function () {
         var player = this;
         var changeIndex = true;
-        if (items[itemIndex].type == 'pl') {
+        if (items[itemIndex].type == 'playlist') {
             var prev = player.playList.index - 1; 
             if (prev < 0 && items.length == 1) {
                 player.playList.index = player.playList.sounds.length - 1;;

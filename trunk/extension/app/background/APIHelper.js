@@ -19,9 +19,10 @@
     }
     
     APIHelper.prototype.getTrackURL = function(trackId, callback) {
-        callAPI('/tracks/'+ trackId + '/streams?client_id=c0e833fecbe9557b9ba8e676b4786b3a', {}, function(data) {
+       /* callAPI('/tracks/'+ trackId + '/streams?client_id=c0e833fecbe9557b9ba8e676b4786b3a', {}, function(data) {
             callback(data.http_mp3_128_url);
-        });
+        });*/
+        callback('https://api.soundcloud.com/tracks/'+ trackId +'/stream?client_id=c0e833fecbe9557b9ba8e676b4786b3a');
     }
     
     function callAPI(str, params, callback) {
