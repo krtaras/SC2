@@ -354,7 +354,7 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  width: 205px;
+  width: 225px;
 }
 .sc-extension .tabs .list .sound .actions {
   float: right;
@@ -363,6 +363,10 @@
   line-height: 35px;
 }
 .sc-extension .tabs .list .sound .actions i {
+  font-size: 18px;
   color: #ff6624;
-  margin: 7px 1px;
+  margin: 10px 1px;
+}
+.sc-extension .tabs .list .sound .actions i:hover {
+  color: #FF3823;
 }

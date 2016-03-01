@@ -24,13 +24,13 @@
                             art: result[i].artwork_url,
                             duration: result[i].duration,
                             position: 0,
-                            dynamicURL: true,
-                            url: "",
+                            dynamicURL: false,
+                            url: result[i].uri + '/stream?client_id=c0e833fecbe9557b9ba8e676b4786b3a',
                             playMe: function(calback) {
-                                APIHelper.getTrackURL(this.id, function(url) {
+                                /*APIHelper.getTrackURL(this.id, function(url) {
                                     console.log(url);
                                     calback(url);
-                                });
+                                });*/
                             }
                         });
                     }
