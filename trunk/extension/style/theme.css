@@ -275,6 +275,10 @@
 }
 .sc-extension .tabs .tb-buttons {
   width: 100%;
+  overflow: auto;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding-left: 4px;
 }
 .sc-extension .tabs .tb-buttons .tb-btn {
   color: #B9B9B9;
@@ -285,12 +289,18 @@
   height: 25px;
   line-height: 25px;
   cursor: pointer;
+  border-bottom: 2px solid #525252;
+  margin-left: -2px;
 }
 .sc-extension .tabs .tb-buttons .tb-btn:hover,
 .sc-extension .tabs .tb-buttons .tb-btn.active {
   text-decoration: underline;
   font-weight: bold;
   color: white;
+  border-bottom: none;
+  border-right: 2px solid #525252;
+  border-left: 2px solid #525252;
+  border-top: 2px solid #525252;
 }
 .sc-extension .tabs .action-box {
   padding: 2px 10px;
