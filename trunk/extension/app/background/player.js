@@ -140,7 +140,6 @@
 	var doPlay = function () {
         var player = this;
 		doStop.call(player);
-        console.log(player.state.loadingSound);
 		var sound = getSound.call(player);
         if(sound.dynamicURL) {
             sound.playMe(function(url) {
@@ -171,21 +170,27 @@
 			onPlay: function() {
                 player.state.loadingSound = true;
 			},
-			onload: function () {
+			onload: function (success) {
                 player.sound.id = sound.id;
 				player.sound.title = sound.title;
                 player.sound.art = sound.art;
 				player.sound.duration = playingSound.duration;
 				player.onPause = false;
                 player.state.loadingSound = false;
-                console.log(player.state.loadingSound);
+                if (!success) {
+                    removeCurrentSound.call(player);
+                    doNext.call(player);
+                }
 			},
 			onfinish: function () {
 				doNext.call(player);
 			},
 			whileplaying: function () {
 				player.sound.position = playingSound.position;
-			}
+			},
+            ondataerror: function() {
+                doNext.call(player);
+            }
 		});
         var volume = 0;
         if (!player.state.isMute) {
@@ -193,6 +198,18 @@
         }
 		playingSound.setVolume(volume);
 		playingSound.play();
+    }
+
+    var removeCurrentSound = function() {
+        var player = this;
+        var item = items[itemIndex];
+        if (item.type == 'playlist') {
+            var soundIndex = player.playList.index;
+            item.sounds.splice(soundIndex, 1);
+            player.playList.sounds.splice(soundIndex, 1);
+        } else {
+            items.splice(itemIndex, 1);
+        }
     }
 
 	var doStop = function () {

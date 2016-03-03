@@ -278,12 +278,12 @@
   overflow: auto;
   margin-bottom: 5px;
   margin-top: 5px;
-  padding-left: 4px;
+  padding-left: 2px;
 }
 .sc-extension .tabs .tb-buttons .tb-btn {
   color: #B9B9B9;
   float: left;
-  width: 25%;
+  width: 93px;
   text-align: center;
   font-size: 12px;
   height: 25px;
@@ -297,6 +297,8 @@
   text-decoration: underline;
   font-weight: bold;
   color: white;
+}
+.sc-extension .tabs .tb-buttons .tb-btn.active {
   border-bottom: none;
   border-right: 2px solid #525252;
   border-left: 2px solid #525252;
