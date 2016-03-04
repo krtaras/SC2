@@ -1,10 +1,10 @@
-<div class="tabs" id="tabsController" ng-controller="TabsController as tabsController">
+<div class="tabs">
     <div class="line"></div>
     <div class="tb-buttons">
-        <div class="tb-btn active">Home</div>
-        <div class="tb-btn">Traks</div>
-        <div class="tb-btn">Playlists</div>
-        <div class="tb-btn">Settings</div>
+        <div class="tb-btn" ng-class="(playerController.state.view.activeTabMark == 'home' ? 'active' : '')" ng-click="playerController.openHomeTab();">Home</div>
+        <div class="tb-btn" ng-class="(playerController.state.view.activeTabMark == 'traks' ? 'active' : '')" ng-click="playerController.openTracksTab();">Traks</div>
+        <div class="tb-btn" ng-class="(playerController.state.view.activeTabMark == 'playLists' ? 'active' : '')" ng-click="playerController.openPlayListTab();">Playlists</div>
+        <div class="tb-btn" ng-class="(playerController.state.view.activeTabMark == 'settings' ? 'active' : '')" ng-click="playerController.openSettingsTab();">Settings</div>
     </div>
-    <div ng-include="'/extension/app/view/homeTab.html'"></div>
+    <div ng-include="playerController.state.view.activeTab"></div>
 </div>

@@ -28,6 +28,19 @@
                 }
             }
             
+            this.openHomeTab = function() {
+                BG.playerService.openHomeTab();
+            }
+            this.openTracksTab = function() {
+                BG.playerService.openTracksTab();
+            }
+            this.openPlayListTab = function() {
+                BG.playerService.openPlayListTab();
+            }
+            this.openSettingsTab = function() {
+                BG.playerService.openSettingsTab();
+            }
+            
             this.muteVolume = function() {
                  Player.mute();
                  updateVolumeIcon();

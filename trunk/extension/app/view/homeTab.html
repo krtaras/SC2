@@ -1,12 +1,13 @@
-<div>
+<div ng-controller="HomeTabController as homeTab">
     <div class="action-box">
         <input class="search" type="search" />
-        <a href="#" class="btn" style="float: left;" ng-click="tabsController.search()">Search</a>
+        <a href="#" class="btn" style="float: left;" ng-click="homeTab.search()">Search</a>
         <a href="#" class="btn" style="float: right; width: 100px;">Stream</a>
     </div>
-    <div class="list">
-        <div class="sound" ng-class="(item.id == tabsController.sound.id) ? 'active' : '' " ng-repeat="item in tabsController.list">
-            <div class="image" style="background-image: url('{{item.art}}')"></div>
+    <div class="list" id="list">
+        <div id="loading"></div>
+        <div class="sound" ng-class="(item.id == homeTab.sound.id) ? 'active' : '' " ng-repeat="item in homeTab.list" id="{{item.id}}" ng-click="homeTab.playSound(item.id)">
+            <div class="image" style="background-image: {{item.art.length > 0 ? 'url(' + item.art + ')' : 'url(https://w.soundcloud.com/icon/assets/images/orange_transparent_64-94fc761.png)'}}"></div>
             <div class="title">{{item.title}}</div>
             <div class="actions">
                 <i class="material-icons">favorite_border</i>
@@ -14,7 +15,6 @@
                 <i class="material-icons">file_download</i>
             </div>
         </div>
-        
         <div class="playlist">
             
         </div>

@@ -57,6 +57,7 @@
 
 	Player.prototype.setPlayList = function(id, name, sounds, firstPage) {
 		if (firstPage) {
+            items = [];
             this.playList.id = id;
 		    this.playList.name = name;
             this.playList.index = 0;
@@ -67,16 +68,30 @@
         items.push(this.playList);
 	}
 	
-	/*Player.prototype.playSoundById = function(soundId) {
-		this.playList.index = -1;
-		for (var i in playList.sounds) {
-			if (playList.sounds[i].id == soundId) {
-				playList.index = i;
-				break;
-			}
-		}
+	Player.prototype.playSoundById = function(soundId) {
+		for (var i in items) {
+            var item = items[i];
+            if (item.type == 'sound') {
+                if (item.id == soundId) {
+                    itemIndex = parseInt(i);
+                    break;
+                }
+            } else {
+                var sounds = item.sounds;
+                for (var j in sounds) {
+                    if (sounds[j].id == soundId) {
+                        itemIndex = parseInt(i);
+                        this.playList.id = item.id;
+                        this.playList.name = item.name;
+                        this.playList.index = parseInt(j);
+                        this.playList.sounds = sounds;
+                        break;
+                    }
+                }
+            }
+        }
 		doPlay.call(this);
-	}*/
+	}
 
 	Player.prototype.play = function () {
 		doPlay.call(this);

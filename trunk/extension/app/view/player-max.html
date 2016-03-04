@@ -1,12 +1,12 @@
 <div class="player full-version">
 	<div class="row">
 		<div class="col">
-			<div class="sound-img" style="background-image: url('{{playerController.player.sound.art}}')"></div>
+			<div class="sound-img" style="background-image: {{playerController.player.sound.art.length > 0 ? 'url(' + playerController.player.sound.art + ')' : 'url(https://w.soundcloud.com/icon/assets/images/orange_transparent_64-94fc761.png)'}}"></div>
 		</div>
 		<div class="col player-actions">
 			<div class="action-row">
 				<div class="pl-title">
-					{{playerController.player.sound.id}} {{playerController.player.sound.title}}
+					{{playerController.player.sound.title}}
 				</div>
 				<div class="pl-minimize">
 					<i class="material-icons" ng-click="playerController.changePlayerViewMode()">fullscreen_exit</i>
