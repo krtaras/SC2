@@ -1,5 +1,6 @@
 ;var APIHelper = (function (SC) {
     
+    var connectionURL = 'https://soundcloud.com/connect?client_id=c0e833fecbe9557b9ba8e676b4786b3a&redirect_uri=http%3a%2f%2fkrtaras.github.io%2fsound-cloud%2fcallback.html&response_type=token&scope=non-expiring';
     SC.initialize({
 		client_id: 'c0e833fecbe9557b9ba8e676b4786b3a',
         redirect_uri: 'http://127.0.0.1/'
