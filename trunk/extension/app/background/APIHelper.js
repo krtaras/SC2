@@ -1,11 +1,20 @@
 ;var APIHelper = (function (SC) {
     
     SC.initialize({
-		client_id: 'c0e833fecbe9557b9ba8e676b4786b3a'
+		client_id: 'c0e833fecbe9557b9ba8e676b4786b3a',
+        redirect_uri: 'http://127.0.0.1/'
     });
     
     function APIHelper() {
         
+    }
+    
+    APIHelper.prototype.connect = function() {
+        SC.connect().then(function() {
+            console.log(SC.get('/me'));
+        }).then(function(me) {
+            console.log('Hello, ' + me.username);
+        });
     }
     
     APIHelper.prototype.searchSounds = function(searchStr, callback) {
