@@ -25,7 +25,8 @@
 					<input ng-model="playerController.player.state.volume" ng-change="playerController.updateVolume()" min="0" max="100" type="range">
 				</div>
 				<div class="pl-repeat">
-					<i class="material-icons">repeat</i>
+					<i class="material-icons" ng-click="playerController.toggleRandom()" ng-if="!playerController.player.state.isRandom">repeat</i>
+                    <i class="material-icons" ng-click="playerController.toggleRandom()" ng-if="playerController.player.state.isRandom">shuffle</i>
 				</div>
 			</div>
 			<div class="action-row">

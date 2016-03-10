@@ -109,6 +109,28 @@
     -webkit-transform: scaleY(1);
   }
 }
+.sc-extension .sign-in-required {
+  text-align: center;
+}
+.sc-extension .sign-in-required .message {
+  color: white;
+  text-align: center;
+  font-size: 14px;
+  padding: 5px;
+}
+.sc-extension .sign-in-required .button {
+  margin: 4px;
+  background: linear-gradient(#F68A43, #E73507);
+  border: 1px solid #333333;
+  border-radius: 5px;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.sc-extension .sign-in-required .button:hover {
+  background: linear-gradient(#E73507, #E73507);
+}
 .sc-extension .row {
   width: 100%;
   padding: 5px;
@@ -351,19 +373,56 @@
 .sc-extension .tabs {
   margin-top: 5px;
 }
+.sc-extension .tabs .action-icon {
+  color: #ff6624;
+  cursor: pointer;
+  font-size: 22px;
+}
+.sc-extension .tabs .action-icon:hover,
+.sc-extension .tabs .action-icon.active {
+  color: #FF3823;
+}
+.sc-extension .tabs .action-btn {
+  float: right;
+  color: white;
+  text-align: center;
+  margin-right: 10px;
+  padding-right: 3px;
+  cursor: pointer;
+  overflow: auto;
+}
+.sc-extension .tabs .action-btn i {
+  float: left;
+}
+.sc-extension .tabs .action-btn label {
+  font-size: 12px;
+  float: left;
+  padding-left: 2px;
+  padding-top: 5px;
+  cursor: pointer;
+}
+.sc-extension .tabs .action-btn:hover,
+.sc-extension .tabs .action-btn.active {
+  color: #FF3823;
+}
+.sc-extension .tabs .action-btn:hover i,
+.sc-extension .tabs .action-btn.active i {
+  color: #FF3823;
+}
 .sc-extension .tabs .btn {
-  border: 1px solid #000000;
-  color: #B9B9B9;
+  background-color: #525252;
+  border: 1px solid #ff6624;
+  border-radius: 5px;
+  color: white;
   text-decoration: none;
   padding: 2px 5px;
-  background-color: #525252;
   text-align: center;
 }
 .sc-extension .tabs .btn:hover,
 .sc-extension .tabs .btn.active {
   color: white;
   border-color: #ff6624;
-  font-weight: bold;
+  background-color: #333333;
 }
 .sc-extension .tabs .line {
   width: 90%;
@@ -410,10 +469,18 @@
 .sc-extension .tabs .action-box .search {
   height: 22px;
   float: left;
-  border: 1px solid black;
-  background-color: #525252;
+  border: none;
+  background-color: transparent;
+  border-bottom: 1px solid #FF6624;
   color: white;
   margin-right: 5px;
+  padding-right: 20px;
+}
+.sc-extension .tabs .action-box .search:focus {
+  outline: none;
+  box-shadow: none;
+  border: none;
+  border-bottom: 1px solid #FF3823;
 }
 .sc-extension .tabs .list {
   overflow: scroll;

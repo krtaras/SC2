@@ -8,13 +8,19 @@
         function HomeTabController($interval) {
             var tc = this;
             var selectedSoundId = -1;
+            this.currentUser = APIHelper.currentUser;
             this.sound = Player.sound;
             this.list = Player.getItemsList();
+            this.searchText = '';
             
+            this.onenter = function(keyEvent) {
+                if (keyEvent.which === 13)
+                    tc.search();
+            }
             this.search = function() {
                 tc.list = [];
                 $('#loading').html(scExtemsionLoadingHtml);
-                APIHelper.searchSounds('nightcore', function(result) {
+                APIHelper.searchSounds(tc.searchText, function(result) {
                     console.log(result);
                     var sounds = []
                     for (var i in result) {
@@ -32,7 +38,7 @@
                             }
                         });
                     }
-                    Player.setPlayList(-1, 'test', sounds, true);
+                    Player.setSounds(sounds, true);
                     tc.list = Player.getItemsList();
                     setTimeout(function() {
                         $('#loading').html('');

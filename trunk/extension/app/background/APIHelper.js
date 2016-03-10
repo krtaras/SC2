@@ -1,43 +1,91 @@
-;var APIHelper = (function (SC) {
-    
+; var APIHelper = (function(SC) {
+
     var connectionURL = 'https://soundcloud.com/connect?client_id=c0e833fecbe9557b9ba8e676b4786b3a&redirect_uri=http%3a%2f%2fkrtaras.github.io%2fsound-cloud%2fcallback.html&response_type=token&scope=non-expiring';
-    SC.initialize({
-		client_id: 'c0e833fecbe9557b9ba8e676b4786b3a',
-        redirect_uri: 'http://127.0.0.1/'
-    });
+    var access_token = '';
     
+    var isGuest = false;
+    var isLoginned = false;
+    var scUser = false;
+    
+    SC.initialize({
+        client_id: 'c0e833fecbe9557b9ba8e676b4786b3a',
+    });
+
     function APIHelper() {
-        
+        this.currentUser = {
+            isGuest: false,
+            isLoginned: false,
+            scUser: false
+        };
+    }
+    
+    APIHelper.prototype.loginAsGuest = function() {
+        var api = this;
+        isGuest = true;
+        isLoginned = true;
+        api.currentUser.isLoginned = isLoginned;
+        api.currentUser.isGuest = isGuest;
     }
     
     APIHelper.prototype.connect = function() {
-        SC.connect().then(function() {
-            console.log(SC.get('/me'));
-        }).then(function(me) {
-            console.log('Hello, ' + me.username);
+        var api = this;
+        chrome.tabs.create({ url: connectionURL, selected: true }, function(tab) {
+            var authTabId = tab.id;
+            chrome.tabs.onUpdated.addListener(function tabUpdateListener(tabId, changeInfo) {
+                if (tabId == authTabId && changeInfo.url != undefined && changeInfo.status == "loading") {
+                    if (changeInfo.url.indexOf('access_token') > -1) {
+                        access_token = getParam('#access_token', changeInfo.url);
+                        if (access_token != null && access_token != '') {
+                            isLoginned = true;
+                            scUser = true;
+                            isGuest = false;
+                        }
+                        api.currentUser.isLoginned = isLoginned;
+                        api.currentUser.isGuest = isGuest;
+                        api.currentUser.scUser = scUser;
+                        chrome.tabs.remove(tabId, function() { });
+                    }
+                }
+            });
         });
     }
-    
+
+    function getParam(param, url) {
+        var vars = {};
+
+        url.replace(location.hash, '').replace(
+            /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+            function(m, key, value) { // callback
+                vars[key] = value !== undefined ? value : '';
+            }
+        );
+
+        if (param) {
+            return vars[param] ? vars[param] : null;
+        }
+        return vars;
+    }
+
     APIHelper.prototype.searchSounds = function(searchStr, callback) {
-        callAPI('/tracks', {q:searchStr, limit:200}, function(data) {
+        callAPI('/tracks', { q: searchStr, limit: 200 }, function(data) {
             callback(data);
         });
     }
-    
+
     APIHelper.prototype.getMyPlaylists = function(callback) {
-        
+
     }
-    
+
     APIHelper.prototype.getTrackURL = function(trackId, callback) {
-       /* callAPI('/tracks/'+ trackId + '/streams?client_id=c0e833fecbe9557b9ba8e676b4786b3a', {}, function(data) {
-            callback(data.http_mp3_128_url);
-        });*/
-        callback('https://api.soundcloud.com/tracks/'+ trackId +'/stream?client_id=c0e833fecbe9557b9ba8e676b4786b3a');
+        /* callAPI('/tracks/'+ trackId + '/streams?client_id=c0e833fecbe9557b9ba8e676b4786b3a', {}, function(data) {
+             callback(data.http_mp3_128_url);
+         });*/
+        callback('https://api.soundcloud.com/tracks/' + trackId + '/stream?client_id=c0e833fecbe9557b9ba8e676b4786b3a');
     }
-    
+
     function callAPI(str, params, callback) {
         SC.get(str, params).then(callback);
     }
-    
+
     return APIHelper;
 })(SC);

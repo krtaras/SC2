@@ -1,7 +1,6 @@
 ;var BackGroundController = (function() {
 	
     function BackGroundController() {
-        this.currentUser = new CurrentUser();
         this.playerService = new PlayerService();
     }
 	

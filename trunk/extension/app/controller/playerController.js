@@ -80,6 +80,10 @@
                 Player.play();
             }
             
+            this.toggleRandom = function() {
+                Player.toggleRandomPlaying();
+            }
+            
             function updateVolumeIcon() {
                 if (Player.state.isMute) {
                     pc.volumeIcon = "volume_off";

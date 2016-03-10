@@ -5,7 +5,6 @@
 		<script type="text/javascript" src="extension/lib/angular.min.js"></script>
 		<script type="text/javascript" src="extension/app/app.js"></script>
         <script type="text/javascript" src="extension/app/controller/stateController.js"></script>
-        <script type="text/javascript" src="extension/app/service/playerProvider.js"></script>
 		<script type="text/javascript" src="extension/app/controller/loginController.js"></script>
 		<script type="text/javascript" src="extension/app/controller/playerController.js"></script>
         <script type="text/javascript" src="extension/app/controller/homeTabController.js"></script>
@@ -14,10 +13,10 @@
 	</head>
 	
 	<body class="sc-extension" ng-controller="StateController">
-		<div ng-class="{'hidden':!currentUser.state.isLoginned}" >
+		<div ng-class="{'hidden':!currentUser.isLoginned}" >
 			<div ng-include="playerPage"></div>
 		</div> 
-		<div ng-class="{'hidden':currentUser.state.isLoginned}">
+		<div ng-class="{'hidden':currentUser.isLoginned}">
 			<div ng-include="loginPage"></div>
 		</div>
 	</body>

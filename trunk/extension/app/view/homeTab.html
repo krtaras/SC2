@@ -1,8 +1,17 @@
 <div ng-controller="HomeTabController as homeTab">
     <div class="action-box">
-        <input class="search" type="text" />
-        <a href="#" class="btn" style="float: left;" ng-click="homeTab.search()">Search</a>
-        <a href="#" class="btn" style="float: right; width: 100px;">Stream</a>
+        <input class="search" type="text" ng-model="homeTab.searchText" ng-keypress="homeTab.onenter($event)"/>
+        <i class="material-icons action-icon" style="margin-left: -25px;" ng-click="homeTab.search()">search</i>
+
+        <div class="action-btn" ng-if="homeTab.currentUser.scUser">
+            <i class="material-icons action-icon">people</i>
+            <label>Charts</label>
+        </div>
+        <div class="action-btn" ng-if="homeTab.currentUser.scUser">
+            <i class="material-icons action-icon">home</i>
+            <label>Stream</label>
+        </div>
+        
     </div>
     <div class="list" id="list">
         <div id="loading"></div>
@@ -10,7 +19,7 @@
             <div class="image" style="background-image: {{item.art.length > 0 ? 'url(' + item.art + ')' : 'url(https://w.soundcloud.com/icon/assets/images/orange_transparent_64-94fc761.png)'}}"></div>
             <div class="title">{{item.title}}</div>
             <div class="actions">
-                <i class="material-icons" ng-if="StateController.currentUser.isLoginned">favorite_border</i>
+                <i class="material-icons" ng-if="homeTab.currentUser.scUser">favorite_border</i>
                 <i class="material-icons">exit_to_app</i>
                 <i class="material-icons">file_download</i>
             </div>
