@@ -32,7 +32,7 @@
 			</div>
 			<div class="action-row">
 				<div class="pl-navigate">
-					<input type="range" ng-model="playerController.player.sound.position" ng-change="playerController.updatePosition()" min="0" max="{{playerController.player.sound.duration}}">
+					<input value="{{playerController.player.sound.position}}" ng-model="playerController.player.sound.position" ng-change="playerController.updatePosition()" min="0" max="{{playerController.player.sound.duration}}"  type="range">
 					<label>{{playerController.player.sound.position | date:'mm:ss'}}</label>
 				</div>
 				<div class="pl-tabs">

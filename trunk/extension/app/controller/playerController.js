@@ -103,12 +103,8 @@
                     }
                 }
             }
-            
+            Player.sound.position = Player.sound.position / 1;
             updateVolumeIcon();
-            
-            $interval(function() {
-               //$scope.player = $player;
-            }, 500);
         }
     ]);
 })();
