@@ -25,7 +25,7 @@
 		this.sound = {
             type: 'sound',
 			id: -1,
-            loading: false,
+            inPlaylist: false,
 			title: ".........",
             art: "",
 			duration: 1000,
@@ -51,32 +51,13 @@
         items = [];
         itemIndex = 0;
 	};
-    
-    Player.prototype.setItem = function(list) {
-       items = list;
-    }
-
-	Player.prototype.setPlayList = function(id, name, sounds, firstPage) {
-		if (firstPage) {
-            items = [];
-            this.playList.id = id;
-		    this.playList.name = name;
-            this.playList.index = 0;
-			this.playList.sounds = sounds;
-		} else {
-            for (var i in sounds) {
-			    this.playList.sounds.push(sounds[i]);
-            }
-		}
-        items.push(this.playList);
-	}
 	
-    Player.prototype.setSounds = function(sounds, replace) {
+    Player.prototype.setItems = function(list, replace) {
         if (replace) {
             items = [];
         }
-        for (var i in sounds) {
-            items.push(sounds[i]);
+        for (var i in list) {
+            items.push(list[i]);
         }
     }
     
@@ -88,23 +69,39 @@
                     itemIndex = parseInt(i);
                     break;
                 }
-            } else {
-                var sounds = item.sounds;
-                for (var j in sounds) {
-                    if (sounds[j].id == soundId) {
-                        itemIndex = parseInt(i);
-                        this.playList.id = item.id;
-                        this.playList.name = item.name;
-                        this.playList.index = parseInt(j);
-                        this.playList.sounds = sounds;
-                        break;
-                    }
-                }
             }
         }
 		doPlay.call(this);
 	}
-
+    
+    Player.prototype.playSoundFromPlayListById = function(soundId, playlistId) {
+        var stopSearch = false;
+        for (var i in items) {
+            var item = items[i];
+            if (item.type == 'playlist') {
+                var sounds = item.sounds;
+                if (item.id == playlistId) {
+                    for (var j in sounds) {
+                        if (sounds[j].id == soundId) {
+                            stopSearch = true;
+                            itemIndex = parseInt(i);
+                            this.playList.id = item.id;
+                            this.playList.name = item.name;
+                            this.playList.index = parseInt(j);
+                            this.playList.sounds = sounds;
+                            break;
+                        }
+                    }
+                }
+                
+                if (stopSearch) {
+                    break;
+                }
+            }
+        }
+        doPlay.call(this);
+    }
+    
 	Player.prototype.play = function () {
 		doPlay.call(this);
 	}
@@ -197,6 +194,7 @@
                 player.sound.id = sound.id;
 				player.sound.title = sound.title;
                 player.sound.art = sound.art;
+                player.sound.inPlaylist = sound.inPlaylist;
 				player.sound.duration = playingSound.duration;
 				player.onPause = false;
                 player.state.loadingSound = false;

@@ -85,7 +85,7 @@
     }
 
     APIHelper.prototype.getSoundsFromPlayList = function(playlist, callback) {
-        callAPI('/playlists/' + playlist.id, {oauth_token:access_token}, function(data) {
+        callAPI('/playlists/' + playlist.id + '/tracks', {oauth_token:access_token}, function(data) {
            callback(playlist, data); 
         });
     }

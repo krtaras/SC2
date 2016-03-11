@@ -503,50 +503,101 @@
 .sc-extension .tabs .list::-webkit-scrollbar-thumb {
   background-color: #FF6624;
 }
-.sc-extension .tabs .list .sound {
+.sc-extension .tabs .list .sound,
+.sc-extension .tabs .list .playlist {
   overflow: auto;
   margin-top: 5px;
   cursor: pointer;
 }
-.sc-extension .tabs .list .sound:hover,
-.sc-extension .tabs .list .sound.active {
-  background-color: #525252;
-}
-.sc-extension .tabs .list .sound .info {
-  overflow: auto;
-  float: left;
-}
-.sc-extension .tabs .list .sound .image {
-  width: 35px;
-  height: 35px;
+.sc-extension .tabs .list .sound .image,
+.sc-extension .tabs .list .playlist .image {
   border: 1px solid white;
   float: left;
   margin: 5px;
   background-size: cover;
 }
-.sc-extension .tabs .list .sound .title {
+.sc-extension .tabs .list .sound .title,
+.sc-extension .tabs .list .playlist .title {
   color: white;
   float: left;
   font-size: 14px;
   margin: 5px 2px;
-  height: 35px;
-  line-height: 35px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+.sc-extension .tabs .list .sound .info,
+.sc-extension .tabs .list .playlist .info {
+  overflow: auto;
+  float: left;
+}
+.sc-extension .tabs .list .sound .info .image,
+.sc-extension .tabs .list .playlist .info .image {
+  width: 35px;
+  height: 35px;
+}
+.sc-extension .tabs .list .sound .info .title,
+.sc-extension .tabs .list .playlist .info .title {
+  height: 35px;
+  line-height: 35px;
   width: 225px;
 }
-.sc-extension .tabs .list .sound .actions {
+.sc-extension .tabs .list .sound .list-sound,
+.sc-extension .tabs .list .playlist .list-sound {
+  overflow: auto;
+  width: 330px;
+  margin-left: 20px;
+  border-left: 2px solid #525252;
+}
+.sc-extension .tabs .list .sound .list-sound:hover,
+.sc-extension .tabs .list .playlist .list-sound:hover,
+.sc-extension .tabs .list .sound .list-sound.active,
+.sc-extension .tabs .list .playlist .list-sound.active {
+  background-color: #525252;
+}
+.sc-extension .tabs .list .sound .list-sound .info .image,
+.sc-extension .tabs .list .playlist .list-sound .info .image {
+  width: 20px;
+  height: 20px;
+}
+.sc-extension .tabs .list .sound .list-sound .info .title,
+.sc-extension .tabs .list .playlist .list-sound .info .title {
+  height: 20px;
+  line-height: 20px;
+  width: 200px;
+}
+.sc-extension .tabs .list .sound .list-sound .actions,
+.sc-extension .tabs .list .playlist .list-sound .actions {
+  height: 20px;
+  line-height: 20px;
+  margin: 0px;
+  margin-top: -3px;
+}
+.sc-extension .tabs .list .sound .actions,
+.sc-extension .tabs .list .playlist .actions {
   float: right;
   height: 35px;
   margin: 5px;
   line-height: 35px;
 }
-.sc-extension .tabs .list .sound .actions i {
+.sc-extension .tabs .list .sound .actions i,
+.sc-extension .tabs .list .playlist .actions i {
   font-size: 18px;
   color: #ff6624;
   margin: 10px 1px;
 }
-.sc-extension .tabs .list .sound .actions i:hover {
+.sc-extension .tabs .list .sound .actions i:hover,
+.sc-extension .tabs .list .playlist .actions i:hover {
   color: #FF3823;
+}
+.sc-extension .tabs .list .sound:hover,
+.sc-extension .tabs .list .sound.active {
+  background-color: #525252;
+}
+.sc-extension .tabs .list .playlist .playlist-info {
+  overflow: auto;
+}
+.sc-extension .tabs .list .playlist .playlist-info:hover,
+.sc-extension .tabs .list .playlist .playlist-info.active {
+  background-color: #525252;
 }

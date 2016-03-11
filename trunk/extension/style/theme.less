@@ -507,24 +507,14 @@
                 background-color:  #FF6624;
             }
             
-            .sound {
+            .sound,
+            .playlist {
                 //border: 1px solid #ff6624;
                 overflow: auto;
                 margin-top: 5px;
                 cursor: pointer;
-                &:hover,
-                &.active {
-                    background-color: #525252;
-                }
-                
-                .info {
-                    overflow: auto;
-                    float: left;
-                }
                 
                 .image {
-                    width: 35px;
-                    height: 35px;
                     border: 1px solid white;
                     float: left;
                     margin: 5px;
@@ -536,12 +526,57 @@
                     float: left;
                     font-size: 14px;
                     margin: 5px 2px;
-                    height: 35px;
-                    line-height: 35px;
                     text-overflow: ellipsis;
                     overflow: hidden;
-                    white-space: nowrap;
-                    width: 225px;
+                    white-space: nowrap;                   
+                }
+                
+                .info {
+                    overflow: auto;
+                    float: left;
+                    
+                    .image {
+                        width: 35px;
+                        height: 35px;
+                    }
+                    
+                    .title {
+                         height: 35px;
+                         line-height: 35px;
+                         width: 225px;
+                    }
+                }
+                
+                .list-sound {
+                    overflow: auto;
+                    width: 330px;
+                    margin-left: 20px;
+                    border-left: 2px solid #525252;
+                    &:hover,
+                    &.active {
+                        background-color: #525252;
+                    }
+                    
+                    .info {
+                                            
+                        .image {
+                            width: 20px;
+                            height: 20px;
+                        }
+                        
+                        .title {
+                            height: 20px;
+                            line-height: 20px;
+                            width: 200px;
+                        }
+                    }
+                    
+                    .actions {
+                        height: 20px;
+                        line-height: 20px;
+                        margin: 0px;
+                        margin-top: -3px;
+                    }
                 }
                 
                 .actions {
@@ -556,6 +591,23 @@
                         &:hover {
                             color: #FF3823;
                         }
+                    }
+                }
+            }
+            
+            .sound {
+                &:hover,
+                &.active {
+                    background-color: #525252;
+                }
+            }
+            
+            .playlist {
+                .playlist-info {
+                    overflow: auto;
+                    &:hover,
+                    &.active {
+                        background-color: #525252;
                     }
                 }
             }

@@ -14,6 +14,7 @@
             
             this.currentUser = APIHelper.currentUser;
             this.sound = Player.sound;
+            this.playlist = Player.playList;
             this.list = Player.getItemsList();
             this.searchText = '';
             
@@ -31,7 +32,7 @@
                         sounds.push({
                             type: 'sound',
                             id: result[i].id,
-                            loading: false,
+                            inPlaylist: false,
                             title: result[i].title,
                             art: result[i].artwork_url,
                             duration: result[i].duration,
@@ -64,7 +65,7 @@
                             list.push({
                                 type: 'sound',
                                 id: object.origin.id,
-                                loading: false,
+                                inPlaylist: false,
                                 title: object.origin.title,
                                 art: object.origin.artwork_url,
                                 duration: object.origin.duration,
@@ -92,7 +93,7 @@
                                         playlist.sounds.push({
                                             type: 'sound',
                                             id: result[i].id,
-                                            loading: false,
+                                            inPlaylist: true,
                                             title: result[i].title,
                                             art: result[i].artwork_url,
                                             duration: result[i].duration,
@@ -115,13 +116,18 @@
                 });
             }
             
-            this.playSound = function(id) {
+            this.playSound = function(id, plId) {
                 if (!isInitialized) {
-                    Player.setSounds(this.list, true);
+                    Player.setItems(this.list, true);
                     console.log('initialize...');
                     isInitialized = true;
                 }
-                Player.playSoundById(id);
+                if (plId == -1) {
+                    Player.playSoundById(id);
+                } else {
+                    Player.playSoundFromPlayListById(id, plId);
+                }
+                
             }
             
             this.goToSoundCloud = function(id) {
@@ -135,9 +141,16 @@
             var scrollTop = $interval(function() {
                if (tc.sound.id != selectedSoundId) {
                    var topOffset = 0;
-                   if ($('#list').find('#'+tc.sound.id).length > 0) {
-                       topOffset = $('#list').find('#'+tc.sound.id).offset().top;
+                   if (tc.sound.inPlaylist) {
+                       if ($('#list').find('#p'+tc.playlist.id).find('#ps'+tc.sound.id).length > 0) {
+                            topOffset = $('#list').find('#p'+tc.playlist.id).find('#ps'+tc.sound.id).offset().top;
+                       }
+                   } else {
+                       if ($('#list').find('#s'+tc.sound.id).length > 0) {
+                            topOffset = $('#list').find('#s'+tc.sound.id).offset().top;
+                       }
                    }
+                   
                    $('#list').scrollTop($('#list').scrollTop() + topOffset - $('#list').offset().top - 10);
                    selectedSoundId = tc.sound.id;
                }
