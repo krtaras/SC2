@@ -8,6 +8,10 @@
         function HomeTabController($interval) {
             var tc = this;
             var selectedSoundId = -1;
+            var isInitialized = true;
+            
+            console.log('homeTab');
+            
             this.currentUser = APIHelper.currentUser;
             this.sound = Player.sound;
             this.list = Player.getItemsList();
@@ -17,11 +21,11 @@
                 if (keyEvent.which === 13)
                     tc.search();
             }
+            
             this.search = function() {
                 tc.list = [];
                 $('#loading').html(scExtemsionLoadingHtml);
                 APIHelper.searchSounds(tc.searchText, function(result) {
-                    console.log(result);
                     var sounds = []
                     for (var i in result) {
                         sounds.push({
@@ -38,22 +42,111 @@
                             }
                         });
                     }
-                    Player.setSounds(sounds, true);
-                    tc.list = Player.getItemsList();
+                    //Player.setSounds(sounds, true);
+                    //tc.list = Player.getItemsList();
+                    tc.list = sounds;
+                    isInitialized = false;
                     setTimeout(function() {
                         $('#loading').html('');
                     }, 500);
                 });
             }
+            
+            this.stream = function() {
+                tc.list = [];
+                $('#loading').html(scExtemsionLoadingHtml);
+                APIHelper.getMyActivities(function(result){
+                    isInitialized = false;
+                    var list = [];
+                    for (var i in result) {
+                        var object = result[i];
+                        if (object.type == 'track') {
+                            list.push({
+                                type: 'sound',
+                                id: object.origin.id,
+                                loading: false,
+                                title: object.origin.title,
+                                art: object.origin.artwork_url,
+                                duration: object.origin.duration,
+                                position: 0,
+                                dynamicURL: false,
+                                url: object.origin.uri + '/stream?client_id=c0e833fecbe9557b9ba8e676b4786b3a',
+                                playMe: function(calback) {
+                                }
+                            });
+                        } else {
+                            if (object.type == 'playlist') {
+                                if (object.origin.id == 94062096) {
+                                    console.log(object);
+                                }
+                                var playlist = {
+                                    type: 'playlist',
+                                    id: object.origin.id,
+                                    title: object.origin.title,
+                                    art: object.origin.artwork_url,
+                                    index: 0,
+                                    sounds: []
+                                };
+                                APIHelper.getSoundsFromPlayList(playlist, function(playlist, result) {
+                                    for (var i in result) {
+                                        playlist.sounds.push({
+                                            type: 'sound',
+                                            id: result[i].id,
+                                            loading: false,
+                                            title: result[i].title,
+                                            art: result[i].artwork_url,
+                                            duration: result[i].duration,
+                                            position: 0,
+                                            dynamicURL: false,
+                                            url: result[i].uri + '/stream?client_id=c0e833fecbe9557b9ba8e676b4786b3a',
+                                            playMe: function(calback) {
+                                            }
+                                        });
+                                    }
+                                });
+                                list.push(playlist);
+                            }
+                        }
+                    }
+                    setTimeout(function() {
+                        $('#loading').html('');
+                    }, 500);
+                    tc.list = list;
+                });
+            }
+            
             this.playSound = function(id) {
+                if (!isInitialized) {
+                    Player.setSounds(this.list, true);
+                    console.log('initialize...');
+                    isInitialized = true;
+                }
                 Player.playSoundById(id);
             }
-            $interval(function() {
+            
+            this.goToSoundCloud = function(id) {
+                
+            }
+            
+            this.getDownloadUrl = function(id) {
+                return APIHelper.getTrackURL(id);
+            }
+            
+            var scrollTop = $interval(function() {
                if (tc.sound.id != selectedSoundId) {
-                   $('#list').scrollTop($('#list').scrollTop() + $('#list').find('#'+tc.sound.id).offset().top - $('#list').offset().top - 10);
+                   var topOffset = 0;
+                   if ($('#list').find('#'+tc.sound.id).length > 0) {
+                       topOffset = $('#list').find('#'+tc.sound.id).offset().top;
+                   }
+                   $('#list').scrollTop($('#list').scrollTop() + topOffset - $('#list').offset().top - 10);
                    selectedSoundId = tc.sound.id;
                }
             }, 1000);
+            
+            $('#list').on('$destroy', function() {
+                $interval.cancel(scrollTop);
+                console.log('stoppedScroll');
+            });
         }
     ]);
 })();

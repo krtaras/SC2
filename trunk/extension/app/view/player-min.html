@@ -14,7 +14,8 @@
 				<div class="pl-buttons">
 					<i class="material-icons" ng-click="playerController.prev()">fast_rewind</i>
 					<i class="material-icons" ng-click="playerController.stop()">stop</i>
-					<i class="material-icons" ng-click="playerController.toggle()">play_arrow</i>
+					<i class="material-icons" ng-if="!playerController.player.state.isPlaying || playerController.player.state.onPause" ng-click="playerController.play()">play_arrow</i>
+                    <i class="material-icons" ng-if="playerController.player.state.isPlaying && !playerController.player.state.onPause" ng-click="playerController.toggle()">pause</i>
 					<i class="material-icons" ng-click="playerController.next()">fast_forward</i>				
                 </div>
 				<div class="pl-volume">		

@@ -57,7 +57,11 @@
             }
             
             this.play = function() {
-                Player.play();
+                if (Player.state.onPause) {
+                    Player.toggle();
+                } else {
+                    Player.play();
+                }
             }
             
             this.stop = function() {

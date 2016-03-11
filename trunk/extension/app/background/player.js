@@ -18,7 +18,8 @@
             isMute:  false,
             isRandom:  false,
             onPause:  false,
-            loadingSound:  false
+            loadingSound:  false,
+            isPlaying: false
         }
         
 		this.sound = {
@@ -199,6 +200,7 @@
 				player.sound.duration = playingSound.duration;
 				player.onPause = false;
                 player.state.loadingSound = false;
+                player.state.isPlaying = true;
                 if (!success) {
                     removeCurrentSound.call(player);
                     doNext.call(player);
@@ -235,9 +237,13 @@
     }
 
 	var doStop = function () {
+        var player = this;
 		if (typeof playingSound !== "undefined") {
 			playingSound.destruct();
 		}
+        player.state.isPlaying = false;
+        player.state.onPause = false;
+        player.sound.position = 0;
 	}
 	
 	var doNext = function () {
