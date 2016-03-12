@@ -32,8 +32,8 @@
 			</div>
 			<div class="action-row">
 				<div class="pl-navigate">
-					<input value="{{playerController.player.sound.position}}" ng-model="playerController.player.sound.position" ng-change="playerController.updatePosition()" min="0" max="{{playerController.player.sound.duration}}"  type="range">
-					<label>{{playerController.player.sound.position | date:'mm:ss'}}</label>
+					<input id="range" step="0.1" ng-model="playerController.player.sound.position" ng-change="playerController.updatePosition()" min="0" max="100"  type="range">
+					<label>{{(playerController.player.sound.position * playerController.player.sound.duration / 100) | date:'mm:ss'}}</label>
 				</div>
 				<div class="pl-tabs">
 					<i class="material-icons" ng-click="playerController.toggleTabs()">apps</i>

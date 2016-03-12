@@ -124,7 +124,7 @@
 
 	Player.prototype.setPosition = function(position) {
 		if (typeof playingSound !== "undefined") {
-			playingSound.setPosition(position);
+			playingSound.setPosition(position * playingSound.duration / 100);
 		}
 	}
 	
@@ -208,7 +208,7 @@
 				doNext.call(player);
 			},
 			whileplaying: function () {
-				player.sound.position = playingSound.position;
+				player.sound.position = (playingSound.position * 100) / playingSound.duration;
 			},
             ondataerror: function() {
                 doNext.call(player);
