@@ -27,26 +27,12 @@
                 tc.list = [];
                 $('#loading').html(scExtemsionLoadingHtml);
                 APIHelper.searchSounds(tc.searchText, function(result) {
+                    isInitialized = false;
                     var sounds = []
                     for (var i in result) {
-                        sounds.push({
-                            type: 'sound',
-                            id: result[i].id,
-                            inPlaylist: false,
-                            title: result[i].title,
-                            art: result[i].artwork_url,
-                            duration: result[i].duration,
-                            position: 0,
-                            dynamicURL: false,
-                            url: result[i].uri + '/stream?client_id=c0e833fecbe9557b9ba8e676b4786b3a',
-                            playMe: function(calback) {
-                            }
-                        });
+                        sounds.push(getSoundObject(result[i], false));
                     }
-                    //Player.setSounds(sounds, true);
-                    //tc.list = Player.getItemsList();
                     tc.list = sounds;
-                    isInitialized = false;
                     setTimeout(function() {
                         $('#loading').html('');
                     }, 500);
@@ -62,19 +48,7 @@
                     for (var i in result) {
                         var object = result[i];
                         if (object.type == 'track') {
-                            list.push({
-                                type: 'sound',
-                                id: object.origin.id,
-                                inPlaylist: false,
-                                title: object.origin.title,
-                                art: object.origin.artwork_url,
-                                duration: object.origin.duration,
-                                position: 0,
-                                dynamicURL: false,
-                                url: object.origin.uri + '/stream?client_id=c0e833fecbe9557b9ba8e676b4786b3a',
-                                playMe: function(calback) {
-                                }
-                            });
+                            list.push(getSoundObject(object.origin, false));
                         } else {
                             if (object.type == 'playlist') {
                                 if (object.origin.id == 94062096) {
@@ -90,29 +64,36 @@
                                 };
                                 APIHelper.getSoundsFromPlayList(playlist, function(playlist, result) {
                                     for (var i in result) {
-                                        playlist.sounds.push({
-                                            type: 'sound',
-                                            id: result[i].id,
-                                            inPlaylist: true,
-                                            title: result[i].title,
-                                            art: result[i].artwork_url,
-                                            duration: result[i].duration,
-                                            position: 0,
-                                            dynamicURL: false,
-                                            url: result[i].uri + '/stream?client_id=c0e833fecbe9557b9ba8e676b4786b3a',
-                                            playMe: function(calback) {
-                                            }
-                                        });
+                                        playlist.sounds.push(getSoundObject(result[i], true));
                                     }
                                 });
                                 list.push(playlist);
                             }
                         }
                     }
+                    tc.list = list;
                     setTimeout(function() {
                         $('#loading').html('');
                     }, 500);
+                });
+            }
+            
+            this.getCharts = function() {
+                tc.list = [];
+                $('#loading').html(scExtemsionLoadingHtml);
+                APIHelper.getCharts(function(result) {
+                    isInitialized = false;
+                    var list = [];
+                    for (var i in result) {
+                        var sound = result[i].track;
+                        if (sound) {
+                            list.push(getSoundObject(sound, false));
+                        }
+                    }
                     tc.list = list;
+                    setTimeout(function() {
+                        $('#loading').html('');
+                    }, 500);
                 });
             }
             
@@ -136,6 +117,22 @@
             
             this.getDownloadUrl = function(id) {
                 return APIHelper.getTrackURL(id);
+            }
+            
+            var getSoundObject = function(object, inPlaylist) {
+                return {
+                    type: 'sound',
+                    id: object.id,
+                    inPlaylist: inPlaylist,
+                    title: object.title,
+                    art: object.artwork_url,
+                    duration: object.duration,
+                    position: 0,
+                    dynamicURL: false,
+                    url: APIHelper.getCompleteURL(object.uri),
+                    playMe: function(calback) {
+                    }
+                }
             }
             
             var scrollTop = $interval(function() {

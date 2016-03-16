@@ -3,7 +3,7 @@
         <input class="search" type="text" ng-model="homeTab.searchText" ng-keypress="homeTab.onenter($event)"/>
         <i class="material-icons action-icon" style="margin-left: -25px;" ng-click="homeTab.search()">search</i>
 
-        <div class="action-btn" ng-if="homeTab.currentUser.scUser">
+        <div class="action-btn" ng-click="homeTab.getCharts()">
             <i class="material-icons action-icon">people</i>
             <label>Charts</label>
         </div>

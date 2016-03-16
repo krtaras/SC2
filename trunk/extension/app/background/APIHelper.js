@@ -84,6 +84,13 @@
         });
     }
 
+    APIHelper.prototype.getCharts = function(callback) {
+        $.getJSON('https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud%3Agenres%3Aall-music&client_id=' + client_id + '&limit=200', {
+        }, function(data) {
+            callback(data.collection);
+        });
+    }
+
     APIHelper.prototype.getSoundsFromPlayList = function(playlist, callback) {
         callAPI('/playlists/' + playlist.id + '/tracks', {oauth_token:access_token}, function(data) {
            callback(playlist, data); 
@@ -92,6 +99,10 @@
 
     APIHelper.prototype.getMyPlaylists = function(callback) {
 
+    }
+
+    APIHelper.prototype.getCompleteURL = function(url) {
+        return url + '/stream?client_id=' + client_id;
     }
 
     APIHelper.prototype.getTrackURL = function(trackId) {
