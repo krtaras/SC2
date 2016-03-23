@@ -16,7 +16,7 @@
     <div class="list" id="list">
         <div id="loading"></div>
         <div ng-repeat="item in homeTab.list">
-            <div ng-if="item.type == 'sound'" class="sound" ng-class="(item.id == homeTab.sound.id && !homeTab.sound.inPlaylist) ? 'active' : '' " id="s{{item.id}}">
+            <div ng-if="item.type == 'sound'" class="sound" ng-class="(item.id == homeTab.sound.id && !homeTab.sound.inPlaylist) ? 'active' : '' " id="sound-{{item.id}}">
                 <div ng-click="homeTab.playSound(item.id, -1)" class="info">
                     <div class="image" style="background-image: {{item.art.length > 0 ? 'url(' + item.art + ')' : 'url(https://w.soundcloud.com/icon/assets/images/orange_transparent_64-94fc761.png)'}}"></div>
                     <div class="title">{{item.title}}</div>
@@ -29,7 +29,7 @@
                     </a>
                 </div>
             </div>
-            <div ng-if="item.type == 'playlist'" class="playlist" id="p{{item.id}}">
+            <div ng-if="item.type == 'playlist'" class="playlist" id="playlist-{{item.id}}">
                 <div class="playlist-info">
                     <div class="info">
                         <div class="image" style="background-image: {{item.art.length > 0 ? 'url(' + item.art + ')' : 'url(https://w.soundcloud.com/icon/assets/images/orange_transparent_64-94fc761.png)'}}"></div>
@@ -40,7 +40,7 @@
                         <i class="material-icons" ng-click="">exit_to_app</i>
                     </div>
                 </div>
-                <div class="list-sound" ng-repeat="sound in item.sounds" ng-class="(sound.id == homeTab.sound.id && homeTab.sound.inPlaylist && item.id == homeTab.playlist.id) ? 'active' : '' " id="ps{{sound.id}}">
+                <div class="list-sound" ng-repeat="sound in item.sounds" ng-class="(sound.id == homeTab.sound.id && homeTab.sound.inPlaylist && item.id == homeTab.playlist.id) ? 'active' : '' " id="pl-sound-{{sound.id}}">
                     <div ng-click="homeTab.playSound(sound.id, item.id)" class="info">
                         <div class="image" style="background-image: {{sound.art.length > 0 ? 'url(' + sound.art + ')' : 'url(https://w.soundcloud.com/icon/assets/images/orange_transparent_64-94fc761.png)'}}"></div>
                         <div class="title">{{sound.title}}</div>

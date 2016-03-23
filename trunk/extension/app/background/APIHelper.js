@@ -73,26 +73,26 @@
     }
 
     APIHelper.prototype.searchSounds = function(searchStr, callback) {
-        callAPI('/tracks', { q: searchStr, limit: 200 }, function(data) {
+        return callAPI('/tracks', { q: searchStr, limit: 200 }, function(data) {
             callback(data);
         });
     }
 
     APIHelper.prototype.getMyActivities = function(callback) {
-        callAPI('/me/activities', {oauth_token:access_token, limit:200}, function(data) {
+        return callAPI('/me/activities', {oauth_token:access_token, limit:200}, function(data) {
             callback(data.collection);
         });
     }
 
     APIHelper.prototype.getCharts = function(callback) {
-        $.getJSON('https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud%3Agenres%3Aall-music&client_id=' + client_id + '&limit=200', {
+        return $.getJSON('https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud%3Agenres%3Aall-music&client_id=' + client_id + '&limit=200', {
         }, function(data) {
             callback(data.collection);
         });
     }
 
     APIHelper.prototype.getSoundsFromPlayList = function(playlist, callback) {
-        callAPI('/playlists/' + playlist.id + '/tracks', {oauth_token:access_token}, function(data) {
+        return callAPI('/playlists/' + playlist.id + '/tracks', {oauth_token:access_token}, function(data) {
            callback(playlist, data); 
         });
     }
@@ -110,8 +110,10 @@
     }
 
     function callAPI(str, params, callback) {
-        SC.get(str, params).then(callback);
+       return SC.get(str, params).then(callback);
     }
 
     return APIHelper;
 })(SC);
+
+var APIHelper = new APIHelper();

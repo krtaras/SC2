@@ -1,5 +1,4 @@
 ;var SCPlayer = null;
-;var apiHelper = null;
 ;var PlayerService = (function(){
     var htmlUrls = {
         max: '/extension/app/view/player-max.html',
@@ -12,7 +11,6 @@
     }
     
     function PlayerService() {
-        apiHelper = new APIHelper();
         SCPlayer = new Player();
         this.view  = {
             isMinimized: false,

@@ -4,7 +4,7 @@
 </div>
 <div ng-if="currentUser.scUser" ng-controller="TracksTabController as tracksTab">
     <div class="action-box">
-        <div class="action-btn">
+        <div class="action-btn" ng-click="tracksTab.myTracks()">
             <i class="material-icons action-icon">library_music</i>
             <label>My Traks</label>
         </div>
@@ -12,6 +12,6 @@
             <i class="material-icons action-icon">favorite</i>
             <label>Favorites</label>
         </div>
-        
     </div>
+    <div ng-include="'/extension/app/view/itemsList.html'"></div>
 </div>
