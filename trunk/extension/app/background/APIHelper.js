@@ -74,26 +74,26 @@
 
     APIHelper.prototype.searchSounds = function(searchStr, callback) {
         return callAPI('/tracks', { q: searchStr, limit: 200 }, function(data) {
-            callback(data);
+           return callback(data);
         });
     }
 
     APIHelper.prototype.getMyActivities = function(callback) {
         return callAPI('/me/activities', {oauth_token:access_token, limit:200}, function(data) {
-            callback(data.collection);
+           return callback(data.collection);
         });
     }
 
     APIHelper.prototype.getCharts = function(callback) {
         return $.getJSON('https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud%3Agenres%3Aall-music&client_id=' + client_id + '&limit=200', {
         }, function(data) {
-            callback(data.collection);
+           return callback(data.collection);
         });
     }
 
     APIHelper.prototype.getSoundsFromPlayList = function(playlist, callback) {
         return callAPI('/playlists/' + playlist.id + '/tracks', {oauth_token:access_token}, function(data) {
-           callback(playlist, data); 
+           return callback(playlist, data); 
         });
     }
 

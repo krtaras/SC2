@@ -7,7 +7,7 @@
     var SCHelper = chrome.extension.getBackgroundPage().SCHelper;
     app.controller(controllerName, ["$interval",
         function TracksTabController($interval) {
-            var tc = this;
+            var ttc = this;
             var selectedSoundId = -1;
             var isInitialized = true;
             
@@ -15,23 +15,24 @@
                         
             this.myTracks = function() {
                 var controller = angular.element($('#list')).scope().itemsController;
-				controller.setItems(
+				controller.setItems( 
                     APIHelper.searchSounds('anime', function(result) {
                         isInitialized = false;
                         var sounds = []
                         for (var i in result) {
                             sounds.push(getSoundObject(result[i], false));
                         }
-                        //tc.list = sounds;
                         return sounds;
-                    }).then(function(){
-                        console.log('asd');
                     })
                );
             }
             
             this.faworites = function() {
                 
+            }
+            
+            var getSoundObject = function(object, inPlaylist) {
+                return SCHelper.buildSoundObject(object, inPlaylist);
             }
         }
     ]);

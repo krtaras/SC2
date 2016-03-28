@@ -19,9 +19,13 @@
             console.log('itemsPage');      
             
             this.setItems = function(callback) {
-                callback.then(function(data){
-                    console.log(data);
-                });
+                SCHelper.drawObjects($('#loading'),
+                    callback.then(function(data){
+                        tc.list = data;
+                        isInitialized = false;
+                        return true;
+                    })
+                );
             }
             
             this.playSound = function(id, plId) {

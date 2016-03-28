@@ -18,11 +18,11 @@
     
     SCHelper.prototype.drawObjects = function(loadingObj, apiCall) {
          loadingObj.html(scExtemsionLoadingHtml);
-         /*apiCall.then(function() {
+         apiCall.then(function() {
             setTimeout(function() {
                 loadingObj.html('');
             }, 500);
-         });*/
+         });
     }
     
     SCHelper.prototype.buildSoundObject = function(object, inPlaylist, calback) {
