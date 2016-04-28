@@ -1,3 +1,4 @@
+//@ sourceURL=APIHelper.js
 ; var APIHelper = (function(SC) {
 
     var client_id = 'c0e833fecbe9557b9ba8e676b4786b3a';
@@ -115,5 +116,3 @@
 
     return APIHelper;
 })(SC);
-
-var APIHelper = new APIHelper();

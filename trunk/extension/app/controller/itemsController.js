@@ -2,7 +2,7 @@
     'use strict';
     var app = angular.module('sound-cloud-player');
     var controllerName = 'ItemsController';
-    var Player = chrome.extension.getBackgroundPage().SCPlayer;
+    var Player = chrome.extension.getBackgroundPage().Player;
     var APIHelper = chrome.extension.getBackgroundPage().APIHelper;
     var SCHelper = chrome.extension.getBackgroundPage().SCHelper;
     app.controller(controllerName, ["$interval",
@@ -11,12 +11,34 @@
             var selectedSoundId = -1;
             var isInitialized = true;
             
-            this.currentUser = APIHelper.currentUser;
-            this.sound = Player.sound;
-            this.playlist = Player.playList;
-            this.list = Player.getItemsList();
+            this.currentUser; // = APIHelper.currentUser;
+            this.sound; // = Player.sound;
+            this.playlist; // = Player.playList;
+            this.list = []; // = Player.getItemsList();
             
-            console.log('itemsPage');      
+            this.init = function() {
+                if (Player.customProperty.activeTabName == chrome.extension.getBackgroundPage().PlayerHelper.view.activeTabName) {
+                    this.construct();
+                    var scrollTop = $interval(function() {
+                        if (tc.sound.id != selectedSoundId) {
+                            SCHelper.scrollToSound($('#list'), tc.sound.id, tc.sound.inPlaylist, tc.playlist.id);
+                            selectedSoundId = tc.sound.id;
+                        }
+                    }, 1000);
+                    
+                    $('#list').on('$destroy', function() {
+                        $interval.cancel(scrollTop);
+                    });
+                }
+            }
+            
+            this.construct = function() {           
+                this.currentUser = APIHelper.currentUser;
+                this.sound = Player.sound;
+                this.playlist = Player.playList;
+                this.list = Player.getItemsList();
+            }   
+            
             
             this.setItems = function(callback) {
                 SCHelper.drawObjects($('#loading'),
@@ -32,6 +54,8 @@
                 if (!isInitialized) {
                     Player.setItems(this.list, true);
                     isInitialized = true;
+                    Player.customProperty.activeTabName = chrome.extension.getBackgroundPage().PlayerHelper.view.activeTabName;
+                    this.init();
                 }
                 if (plId == -1) {
                     Player.playSoundById(id);
@@ -47,17 +71,6 @@
             this.getDownloadUrl = function(id) {
                 return APIHelper.getTrackURL(id);
             }
-            
-            var scrollTop = $interval(function() {
-               if (tc.sound.id != selectedSoundId) {
-                   SCHelper.scrollToSound($('#list'), tc.sound.id, tc.sound.inPlaylist, tc.playlist.id);
-                   selectedSoundId = tc.sound.id;
-               }
-            }, 1000);
-            
-            $('#list').on('$destroy', function() {
-                $interval.cancel(scrollTop);
-            });
         }
     ]);
 })();

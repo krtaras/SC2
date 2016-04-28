@@ -2,43 +2,44 @@
     'use strict';
     var app = angular.module('sound-cloud-player');
     var controllerName = 'PlayerController';
-    var Player = chrome.extension.getBackgroundPage().SCPlayer;
-    var BG = chrome.extension.getBackgroundPage().BackGround;
+    var Player = chrome.extension.getBackgroundPage().Player;
+    var PlayerHelper = chrome.extension.getBackgroundPage().PlayerHelper;
     app.controller(controllerName, ["$interval",
         function PlayerController($interval) {
             var pc = this;
             
-            this.state = BG.playerService;
+            this.view = PlayerHelper.view;
+            this.tabsList = PlayerHelper.tabsList;
             this.player = Player;
             this.volumeIcon = "";
             
             this.changePlayerViewMode = function() {
-                if (BG.playerService.view.isMinimized) {
-                    BG.playerService.maximize();
+                if (PlayerHelper.view.isMinimized) {
+                    PlayerHelper.maximize();
                 } else {
-                    BG.playerService.minimize();
+                    PlayerHelper.minimize();
                 }
             }
             
             this.toggleTabs = function() {
-                if (BG.playerService.view.isTabsOpened) {
-                    BG.playerService.closeTabs();
+                if (PlayerHelper.view.isTabsOpened) {
+                    PlayerHelper.closeTabs();
                 } else {
-                    BG.playerService.openTabs();
+                    PlayerHelper.openTabs();
                 }
             }
             
             this.openHomeTab = function() {
-                BG.playerService.openHomeTab();
+                PlayerHelper.openHomeTab();
             }
             this.openTracksTab = function() {
-                BG.playerService.openTracksTab();
+                PlayerHelper.openTracksTab();
             }
             this.openPlayListTab = function() {
-                BG.playerService.openPlayListTab();
+                PlayerHelper.openPlayListTab();
             }
             this.openSettingsTab = function() {
-                BG.playerService.openSettingsTab();
+                PlayerHelper.openSettingsTab();
             }
             
             this.muteVolume = function() {
@@ -103,7 +104,29 @@
                     }
                 }
             }
+            
+            function setActiveTab() {
+                var plaingTab = Player.customProperty.activeTabName;
+                if (plaingTab) {
+                    switch (plaingTab) {
+                        case PlayerHelper.tabsList.tracksTabName:  
+                            pc.openTracksTab();                     
+                            break;
+                        case PlayerHelper.tabsList.playListsTabName:   
+                            pc.openPlayListTab();                    
+                            break; 
+                        case PlayerHelper.tabsList.settingsTabName:  
+                            pc.openSettingsTab();                     
+                            break;
+                        default:
+                            pc.openHomeTab();
+                            break;
+                    }
+                }
+            }
+            
             updateVolumeIcon();
+            setActiveTab();
             $interval(function() {
                //$scope.player = $player;
             }, 0);

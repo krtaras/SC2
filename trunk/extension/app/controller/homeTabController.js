@@ -2,7 +2,7 @@
     'use strict';
     var app = angular.module('sound-cloud-player');
     var controllerName = 'HomeTabController';
-    var Player = chrome.extension.getBackgroundPage().SCPlayer;
+    var Player = chrome.extension.getBackgroundPage().Player;
     var APIHelper = chrome.extension.getBackgroundPage().APIHelper;
     var SCHelper = chrome.extension.getBackgroundPage().SCHelper;
     app.controller(controllerName, ["$interval",

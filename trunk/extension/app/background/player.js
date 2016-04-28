@@ -1,3 +1,4 @@
+//@ sourceURL=Player.js
 ;var Player = (function () {
 	
     soundManager.setup({
