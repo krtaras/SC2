@@ -7,31 +7,34 @@
                 <div class="title">{{item.title}}</div>
             </div>
             <div class="actions">
-                <i class="material-icons" ng-if="itemsController.currentUser.scUser">favorite_border</i>
+                <i class="material-icons" ng-if="currentUser.scUser && !item.marked" ng-click="itemsController.doLikeTrack(item.id)">favorite_border</i>
+                <i class="material-icons" ng-if="currentUser.scUser && item.marked" ng-click="itemsController.doUnLikeTrack(item.id)">favorite</i>
                 <i class="material-icons" ng-click="">exit_to_app</i>
                 <a href="{{itemsController.getDownloadUrl(item.id)}}" download="{{itemsController.sound.title}}.mp3">
                     <i class="material-icons">file_download</i>
                 </a>
             </div>
         </div>
-        <div ng-if="item.type == 'playlist'" class="playlist" id="playlist-{{item.id}}">
+        <div ng-if="item.type == 'playlist'" class="playlist" id="playlist-{{item.id}}" ng-init="item.isOpened=flase;">
             <div class="playlist-info">
-                <div class="info">
+                <div class="info" ng-click="item.isOpened=!item.isOpened">
                     <div class="image" style="background-image: {{item.art.length > 0 ? 'url(' + item.art + ')' : 'url(https://w.soundcloud.com/icon/assets/images/orange_transparent_64-94fc761.png)'}}"></div>
                     <div class="title">{{item.title}}</div>
                 </div>
                 <div class="actions">
-                    <i class="material-icons">favorite_border</i>
+                    <i class="material-icons" ng-click="item.isOpened=!item.isOpened">dehaze</i>
+                    <i class="material-icons" ng-if="currentUser.scUser">favorite_border</i>
                     <i class="material-icons" ng-click="">exit_to_app</i>
                 </div>
             </div>
-            <div class="list-sound" ng-repeat="sound in item.sounds" ng-class="(sound.id == itemsController.sound.id && itemsController.sound.inPlaylist && item.id == itemsController.playlist.id) ? 'active' : '' " id="pl-sound-{{sound.id}}">
+            <div ng-if="item.isOpened || item.id == itemsController.playlist.id" class="list-sound" ng-repeat="sound in item.sounds" ng-class="(sound.id == itemsController.sound.id && itemsController.sound.inPlaylist && item.id == itemsController.playlist.id) ? 'active' : '' " id="pl-sound-{{sound.id}}">
                 <div ng-click="itemsController.playSound(sound.id, item.id)" class="info">
                     <div class="image" style="background-image: {{sound.art.length > 0 ? 'url(' + sound.art + ')' : 'url(https://w.soundcloud.com/icon/assets/images/orange_transparent_64-94fc761.png)'}}"></div>
                     <div class="title">{{sound.title}}</div>
                 </div>
                 <div class="actions">
-                    <i class="material-icons">favorite_border</i>
+                    <i class="material-icons" ng-if="currentUser.scUser && !sound.marked" ng-click="itemsController.doLikeTrack(sound.id)">favorite_border</i>
+                    <i class="material-icons" ng-if="currentUser.scUser && sound.marked" ng-click="itemsController.doUnLikeTrack(sound.id)">favorite</i>
                     <i class="material-icons" ng-click="">exit_to_app</i>
                     <a href="" download="aa.mp3">
                         <i class="material-icons">file_download</i>

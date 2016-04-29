@@ -4,17 +4,17 @@
  * Licensed under the ISC license
  */
 //@ sourceURL=APIHelper.js
-; var APIHelper = (function(SC) {
+; var APIHelper = (function (SC) {
 
     var client_id = 'c0e833fecbe9557b9ba8e676b4786b3a';
     var connectionURL = 'https://soundcloud.com/connect?client_id=c0e833fecbe9557b9ba8e676b4786b3a&redirect_uri=http%3a%2f%2fkrtaras.github.io%2fsound-cloud%2fcallback.html&response_type=token&scope=non-expiring';
     var access_token = '';
-    
-    
+
+
     var isGuest = false;
     var isLoginned = false;
     var scUser = false;
-    
+
     SC.initialize({
         client_id: 'c0e833fecbe9557b9ba8e676b4786b3a',
     });
@@ -26,48 +26,141 @@
             scUser: false
         };
     }
-    
-    APIHelper.prototype.loginAsGuest = function() {
+
+    APIHelper.prototype.loginAsGuest = function () {
         var api = this;
         isGuest = true;
         isLoginned = true;
         api.currentUser.isLoginned = isLoginned;
         api.currentUser.isGuest = isGuest;
     }
-    
-    APIHelper.prototype.connect = function() {
+
+    APIHelper.prototype.connect = function () {
         var api = this;
-        chrome.tabs.create({ url: connectionURL, selected: true }, function(tab) {
+        chrome.tabs.create({ url: connectionURL, selected: true }, function (tab) {
             var authTabId = tab.id;
             chrome.tabs.onUpdated.addListener(function tabUpdateListener(tabId, changeInfo) {
                 if (tabId == authTabId && changeInfo.url != undefined && changeInfo.status == "loading") {
                     if (changeInfo.url.indexOf('access_token') > -1) {
                         access_token = getParam('#access_token', changeInfo.url);
                         if (access_token != null && access_token != '') {
-                              SC.initialize({
-                                    client_id: 'c0e833fecbe9557b9ba8e676b4786b3a',
-                                    oauth_token: access_token
-                              });
-                              isLoginned = true;
-                              scUser = true;
-                              isGuest = false;
+                            SC.initialize({
+                                client_id: 'c0e833fecbe9557b9ba8e676b4786b3a',
+                                oauth_token: access_token
+                            });
+                            isLoginned = true;
+                            scUser = true;
+                            isGuest = false;
                         }
                         api.currentUser.isLoginned = isLoginned;
                         api.currentUser.isGuest = isGuest;
                         api.currentUser.scUser = scUser;
-                        chrome.tabs.remove(tabId, function() { });
+                        chrome.tabs.remove(tabId, function () { });
                     }
                 }
             });
         });
     }
 
+    APIHelper.prototype.searchSounds = function (searchStr, callback) {
+        return callGetAPI('/tracks', { q: searchStr, limit: 200 }, function (data) {
+            return callback(data);
+        });
+    }
+
+    APIHelper.prototype.getMyActivities = function (callback) {
+        return callGetAPI('/me/activities', { oauth_token: access_token, limit: 200 }, function (data) {
+            return callback(data.collection);
+        });
+    }
+
+    APIHelper.prototype.getCharts = function (callback) {
+        return $.getJSON('https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud%3Agenres%3Aall-music&client_id=' + client_id + '&limit=200')
+            .then(function (data) {
+                return callback(data.collection);
+            });
+    }
+
+    APIHelper.prototype.getMyTracks = function (callback) {
+        return callGetAPI('/me/tracks', { oauth_token: access_token, limit: 200 }, function (data) {
+            return callback(data);
+        });
+    }
+
+    APIHelper.prototype.getMyFavorites = function (callback) {
+        return callGetAPI('/me/favorites', { oauth_token: access_token, limit: 200 }, function (data) {
+            return callback(data);
+        });
+    }
+
+    APIHelper.prototype.getSoundsFromPlayList = function (playlist, callback) {
+        return callGetAPI('/playlists/' + playlist.id + '/tracks', { oauth_token: access_token }, function (data) {
+            return callback(playlist, data);
+        });
+    }
+
+    APIHelper.prototype.getMyPlaylists = function (callback) {
+        return callGetAPI('/me/playlists', { oauth_token: access_token, limit: 200 }, function (data) {
+            return callback(data);
+        });
+    }
+    
+    APIHelper.prototype.getMyFavoritePlaylists = function (callback) {
+        return callGetAPI('/e1/me/playlist_likes', {oauth_token: access_token, limit: 200,}, function (data) {
+            return callback(data);
+        });
+    }
+
+    APIHelper.prototype.doUnLikeTrack = function (trackId, callback) {
+        return callDeleteAPI('/me/favorites/' + trackId, { oauth_token: access_token }, function (data) {
+            return callback(data);
+        });
+    }
+
+    APIHelper.prototype.doLikeTrack = function (trackId, callback) {
+        return callPutAPI('/me/favorites/' + trackId, { oauth_token: access_token }, function (data) {
+            return callback(data);
+        });
+    }
+
+    APIHelper.prototype.doUnLikePlaylist = function (playListId, callback) {
+        return callDeleteAPI('/e1/me/playlist_likes/' + playListId, { oauth_token: access_token }, function (data) {
+            return callback(data);
+        });
+    }
+
+    APIHelper.prototype.doLikePlaylist = function (playListId, callback) {
+        return callPutAPI('/e1/me/playlist_likes/' + playListId, { oauth_token: access_token }, function (data) {
+            return callback(data);
+        });
+    }
+
+    APIHelper.prototype.getCompleteURL = function (url) {
+        return url + '/stream?client_id=' + client_id;
+    }
+
+    APIHelper.prototype.getTrackURL = function (trackId) {
+        return 'https://api.soundcloud.com/tracks/' + trackId + '/stream?client_id=' + client_id;
+    }
+
+    function callGetAPI(str, params, callback) {
+        return SC.get(str, params).then(callback);
+    }
+
+    function callPutAPI(str, params, callback) {
+        return SC.put(str, params).then(callback);
+    }
+
+    function callDeleteAPI(str, params, callback) {
+        return SC.delete(str, params).then(callback);
+    }
+
     function getParam(param, url) {
         var vars = {};
 
         url.replace(location.hash, '').replace(
-            /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
-            function(m, key, value) { // callback
+            /[?&]+([^=&]+)=?([^&]*)?/gi,
+            function (m, key, value) {
                 vars[key] = value !== undefined ? value : '';
             }
         );
@@ -76,47 +169,6 @@
             return vars[param] ? vars[param] : null;
         }
         return vars;
-    }
-
-    APIHelper.prototype.searchSounds = function(searchStr, callback) {
-        return callAPI('/tracks', { q: searchStr, limit: 200 }, function(data) {
-           return callback(data);
-        });
-    }
-
-    APIHelper.prototype.getMyActivities = function(callback) {
-        return callAPI('/me/activities', {oauth_token:access_token, limit:200}, function(data) {
-           return callback(data.collection);
-        });
-    }
-
-    APIHelper.prototype.getCharts = function(callback) {
-        return $.getJSON('https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud%3Agenres%3Aall-music&client_id=' + client_id + '&limit=200', {
-        }, function(data) {
-           return callback(data.collection);
-        });
-    }
-
-    APIHelper.prototype.getSoundsFromPlayList = function(playlist, callback) {
-        return callAPI('/playlists/' + playlist.id + '/tracks', {oauth_token:access_token}, function(data) {
-           return callback(playlist, data); 
-        });
-    }
-
-    APIHelper.prototype.getMyPlaylists = function(callback) {
-
-    }
-
-    APIHelper.prototype.getCompleteURL = function(url) {
-        return url + '/stream?client_id=' + client_id;
-    }
-
-    APIHelper.prototype.getTrackURL = function(trackId) {
-        return 'https://api.soundcloud.com/tracks/' + trackId + '/stream?client_id=' + client_id;
-    }
-
-    function callAPI(str, params, callback) {
-       return SC.get(str, params).then(callback);
     }
 
     return APIHelper;
@@ -157,7 +209,8 @@
             dynamicURL: false,
             url: "",
             playMe: function() {
-            }
+            },
+            marked: false
 		};
         
         this.playList = {
@@ -166,6 +219,7 @@
             title: ".........",
             art: "",
             index: 0,
+            marked: false,
             sounds: []
         }
         
@@ -281,10 +335,32 @@
         return items;
     }
     
+    Player.prototype.setLikeForSound = function(soundId, like) {
+        for (var i in items) {
+            var item = items[i];
+            if (item.type == 'sound') {
+                if (item.id == soundId) {
+                    item.marked = like;
+                }
+            }
+            if (item.type == 'playlist') {
+                var sounds = item.sounds;
+                for (var j in sounds) {
+                    if (sounds[j].id == soundId) {
+                        sounds[j].marked = like;
+                    }
+                }
+            }
+        }
+    }
+    
 	var doPlay = function () {
         var player = this;
 		doStop.call(player);
 		var sound = getSound.call(player);
+        if (sound == null) {
+            doNext.call(player);
+        }
         if(sound.dynamicURL) {
             sound.playMe(function(url) {
                 sound.url = url;
@@ -299,9 +375,16 @@
         var player = this;
         var item = items[itemIndex];
         if (item.type == 'playlist') {
-            if (item.id == player.playList.id) {
-                return player.playList.sounds[player.playList.index];
+            if (item.sounds.length < 1) {
+                return null;
             }
+            if (item.id != player.playList.id) {
+                 player.playList.id = item.id;
+                 player.playList.name = item.name;
+                 player.playList.sounds = item.sounds;
+                 player.playList.index = 0;
+            }
+            return player.playList.sounds[player.playList.index];
         } else {
             return item;
         }
@@ -557,7 +640,8 @@
             dynamicURL: false,
             url: APIHelper.getCompleteURL(object.uri),
             playMe: function(calback) {
-            }
+            },
+            marked: ((object.user_favorite) ? true : false)
         }
         return result;
     };

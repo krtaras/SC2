@@ -1,37 +1,42 @@
 //@ sourceURL=tracksTabController.js
-;(function () {
+; (function () {
     'use strict';
     var app = angular.module('sound-cloud-player');
     var controllerName = 'TracksTabController';
     var APIHelper = chrome.extension.getBackgroundPage().APIHelper;
     var SCHelper = chrome.extension.getBackgroundPage().SCHelper;
-    app.controller(controllerName, ["$interval",
-        function TracksTabController($interval) {
-            var ttc = this;
-            var selectedSoundId = -1;
-            var isInitialized = true;
+    app.controller(controllerName, [
+        function TracksTabController() {
             
             console.log('trackTab');
-                     
-            this.myTracks = function() {
+            
+            this.myTracks = function () {
                 var controller = angular.element($('#list')).scope().itemsController;
-				controller.setItems( 
-                    APIHelper.searchSounds('anime', function(result) {
-                        isInitialized = false;
+                controller.setItems(
+                    APIHelper.getMyTracks(function (result) {
                         var sounds = []
                         for (var i in result) {
                             sounds.push(getSoundObject(result[i], false));
                         }
                         return sounds;
                     })
-               );
+                );
             }
-            
-            this.faworites = function() {
-                
+
+            this.favorites = function () {
+                var controller = angular.element($('#list')).scope().itemsController;
+                controller.setItems(
+                    APIHelper.getMyFavorites(function (result) {
+                        var sounds = []
+                        for (var i in result) {
+                            sounds.push(getSoundObject(result[i], false));
+                        }
+                        return sounds;
+                    })
+                );
             }
-            
-            var getSoundObject = function(object, inPlaylist) {
+
+            var getSoundObject = function (object, inPlaylist) {
                 return SCHelper.buildSoundObject(object, inPlaylist);
             }
         }

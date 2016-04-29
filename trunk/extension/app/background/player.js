@@ -34,7 +34,8 @@
             dynamicURL: false,
             url: "",
             playMe: function() {
-            }
+            },
+            marked: false
 		};
         
         this.playList = {
@@ -43,6 +44,7 @@
             title: ".........",
             art: "",
             index: 0,
+            marked: false,
             sounds: []
         }
         
@@ -158,10 +160,32 @@
         return items;
     }
     
+    Player.prototype.setLikeForSound = function(soundId, like) {
+        for (var i in items) {
+            var item = items[i];
+            if (item.type == 'sound') {
+                if (item.id == soundId) {
+                    item.marked = like;
+                }
+            }
+            if (item.type == 'playlist') {
+                var sounds = item.sounds;
+                for (var j in sounds) {
+                    if (sounds[j].id == soundId) {
+                        sounds[j].marked = like;
+                    }
+                }
+            }
+        }
+    }
+    
 	var doPlay = function () {
         var player = this;
 		doStop.call(player);
 		var sound = getSound.call(player);
+        if (sound == null) {
+            doNext.call(player);
+        }
         if(sound.dynamicURL) {
             sound.playMe(function(url) {
                 sound.url = url;
@@ -176,9 +200,16 @@
         var player = this;
         var item = items[itemIndex];
         if (item.type == 'playlist') {
-            if (item.id == player.playList.id) {
-                return player.playList.sounds[player.playList.index];
+            if (item.sounds.length < 1) {
+                return null;
             }
+            if (item.id != player.playList.id) {
+                 player.playList.id = item.id;
+                 player.playList.name = item.name;
+                 player.playList.sounds = item.sounds;
+                 player.playList.index = 0;
+            }
+            return player.playList.sounds[player.playList.index];
         } else {
             return item;
         }

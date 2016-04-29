@@ -3,51 +3,42 @@
  * Copyright 2015-2016 
  * Licensed under the ISC license
  */
-;(function () {
+//@ sourceURL=tracksTabController.js
+; (function () {
     'use strict';
     var app = angular.module('sound-cloud-player');
     var controllerName = 'HomeTabController';
-    var Player = chrome.extension.getBackgroundPage().Player;
     var APIHelper = chrome.extension.getBackgroundPage().APIHelper;
     var SCHelper = chrome.extension.getBackgroundPage().SCHelper;
-    app.controller(controllerName, ["$interval",
-        function HomeTabController($interval) {
-            var tc = this;
-            var selectedSoundId = -1;
-            var isInitialized = true;
-            
+    app.controller(controllerName, [
+        function HomeTabController() {
+            var htc = this;
             console.log('homeTab');
-            
-            this.currentUser = APIHelper.currentUser;
-            this.sound = Player.sound;
-            this.playlist = Player.playList;
-            this.list = Player.getItemsList();
+
             this.searchText = '';
-            
-            this.onenter = function(keyEvent) {
+
+            this.onenter = function (keyEvent) {
                 if (keyEvent.which === 13)
-                    tc.search();
+                    htc.search();
             }
-            
-            this.search = function() {
-                tc.list = [];
-                SCHelper.drawObjects($('#loading'),
-                    APIHelper.searchSounds(tc.searchText, function(result) {
-                        isInitialized = false;
+
+            this.search = function () {
+                var controller = angular.element($('#list')).scope().itemsController;
+                controller.setItems(
+                    APIHelper.searchSounds(htc.searchText, function (result) {
                         var sounds = []
                         for (var i in result) {
                             sounds.push(getSoundObject(result[i], false));
                         }
-                        tc.list = sounds;
+                       return sounds;
                     })
                 );
             }
-            
-            this.stream = function() {
-                tc.list = [];
-                SCHelper.drawObjects($('#loading'),
-                    APIHelper.getMyActivities(function(result){
-                        isInitialized = false;
+
+            this.stream = function () {
+                var controller = angular.element($('#list')).scope().itemsController;
+                controller.setItems(
+                   APIHelper.getMyActivities(function (result) {
                         var list = [];
                         for (var i in result) {
                             var object = result[i];
@@ -55,8 +46,8 @@
                                 list.push(getSoundObject(object.origin, false));
                             } else {
                                 if (object.type == 'playlist') {
-                                    var playlist = SCHelper.buildPlayListObject(object.origin);
-                                    APIHelper.getSoundsFromPlayList(playlist, function(playlist, result) {
+                                    var playlist = getPlayListObject(object);
+                                    APIHelper.getSoundsFromPlayList(playlist, function (playlist, result) {
                                         for (var i in result) {
                                             playlist.sounds.push(getSoundObject(result[i], true));
                                         }
@@ -65,16 +56,15 @@
                                 }
                             }
                         }
-                        tc.list = list;
+                        return list;
                     })
                 );
             }
-            
-            this.getCharts = function() {
-                tc.list = [];
-                SCHelper.drawObjects($('#loading'),
-                    APIHelper.getCharts(function(result) {
-                        isInitialized = false;
+
+            this.getCharts = function () {
+                var controller = angular.element($('#list')).scope().itemsController;
+                controller.setItems(
+                    APIHelper.getCharts(function (result) {
                         var list = [];
                         for (var i in result) {
                             var sound = result[i].track;
@@ -82,46 +72,18 @@
                                 list.push(getSoundObject(sound, false));
                             }
                         }
-                        tc.list = list;
+                        return list;
                     })
                 );
             }
-            
-            this.playSound = function(id, plId) {
-                if (!isInitialized) {
-                    Player.setItems(this.list, true);
-                    isInitialized = true;
-                }
-                if (plId == -1) {
-                    Player.playSoundById(id);
-                } else {
-                    Player.playSoundFromPlayListById(id, plId);
-                }
-                
-            }
-            
-            this.goToSoundCloud = function(id) {
-                
-            }
-            
-            this.getDownloadUrl = function(id) {
-                return APIHelper.getTrackURL(id);
-            }
-            
-            var getSoundObject = function(object, inPlaylist) {
+
+            var getSoundObject = function (object, inPlaylist) {
                 return SCHelper.buildSoundObject(object, inPlaylist);
             }
-            
-            var scrollTop = $interval(function() {
-               if (tc.sound.id != selectedSoundId) {
-                   SCHelper.scrollToSound($('#list'), tc.sound.id, tc.sound.inPlaylist, tc.playlist.id);
-                   selectedSoundId = tc.sound.id;
-               }
-            }, 1000);
-            
-            $('#list').on('$destroy', function() {
-                $interval.cancel(scrollTop);
-            });
+
+            var getPlayListObject = function(object) {
+                return  SCHelper.buildPlayListObject(object.origin);
+            }
         }
     ]);
 })();
@@ -191,12 +153,46 @@
                 }
             }
             
+            this.doLikeTrack = function(id) {
+                setLikeForSound(id, true);
+                Player.setLikeForSound(id, true);
+                APIHelper.doLikeTrack(id, function(data) {
+                });
+            }
+            
+            this.doUnLikeTrack = function(id) {
+                setLikeForSound(id, false);
+                Player.setLikeForSound(id, false);
+                APIHelper.doUnLikeTrack(id, function(data) {
+                });
+            }
+            
             this.goToSoundCloud = function(id) {
                 
             }
             
             this.getDownloadUrl = function(id) {
                 return APIHelper.getTrackURL(id);
+            }
+            
+            var setLikeForSound = function(soundId, like) {
+                var items = tc.list;
+                for (var i in items) {
+                    var item = items[i];
+                    if (item.type == 'sound') {
+                        if (item.id == soundId) {
+                            item.marked = like;
+                        }
+                    }
+                    if (item.type == 'playlist') {
+                        var sounds = item.sounds;
+                        for (var j in sounds) {
+                            if (sounds[j].id == soundId) {
+                                sounds[j].marked = like;
+                            }
+                        }
+                    }
+                }
             }
         }
     ]);
@@ -353,7 +349,79 @@
         }
     ]);
 })();
+//@ sourceURL=tracksTabController.js
+; (function () {
+    'use strict';
+    var app = angular.module('sound-cloud-player');
+    var controllerName = 'PlayListTabController';
+    var APIHelper = chrome.extension.getBackgroundPage().APIHelper;
+    var SCHelper = chrome.extension.getBackgroundPage().SCHelper;
+    app.controller(controllerName, [
+        function PlayListTabController() {
+            
+            console.log('playListTab');
+            
+            this.myPlaylists = function () {
+                var controller = angular.element($('#list')).scope().itemsController;
+                controller.setItems(
+                    APIHelper.getMyPlaylists(function (result) {
+                        var list = [];
+                        for (var i in result) {
+                            var object = result[i];
+                            buildPlayList(object, list);
+                        }
+                        return list;
+                    })
+                );
+            }
 
+            this.favoritesPlaylists = function () {
+                var controller = angular.element($('#list')).scope().itemsController;
+                controller.setItems(
+                    APIHelper.getMyFavoritePlaylists(function (result) {
+                        var list = [];
+                        for (var i in result) {
+                            var object = result[i].playlist;
+                            if(object) {
+                                buildPlayList(object, list);
+                            }
+                        }
+                        return list;
+                    })
+                );
+            }
+
+            var buildPlayList = function (object, list) {
+                var playlist = getPlayListObject(object);
+                var tracks = object.tracks;
+                if (!playlist.art || playlist.art == "") {
+                    if (tracks.length > 0) {
+                        var first = tracks[0];
+                        if (first.artwork_url || first.artwork_url != "") {
+                            playlist.art = first.artwork_url
+                        }
+                    }
+                }
+                for (var i in tracks) {
+                    var track = tracks[i];
+                    if (!track.artwork_url || track.artwork_url == "") {
+                        track.artwork_url = playlist.art;
+                    }
+                    playlist.sounds.push(getSoundObject(track, true));
+                }
+                list.push(playlist);
+            }
+
+            var getSoundObject = function (object, inPlaylist) {
+                return SCHelper.buildSoundObject(object, inPlaylist);
+            }
+            
+            var getPlayListObject = function(object) {
+                return  SCHelper.buildPlayListObject(object);
+            }
+        }
+    ]);
+})();
 
 ;(function () {
     'use strict';
@@ -369,39 +437,44 @@
     ]);
 })();
 //@ sourceURL=tracksTabController.js
-;(function () {
+; (function () {
     'use strict';
     var app = angular.module('sound-cloud-player');
     var controllerName = 'TracksTabController';
     var APIHelper = chrome.extension.getBackgroundPage().APIHelper;
     var SCHelper = chrome.extension.getBackgroundPage().SCHelper;
-    app.controller(controllerName, ["$interval",
-        function TracksTabController($interval) {
-            var ttc = this;
-            var selectedSoundId = -1;
-            var isInitialized = true;
+    app.controller(controllerName, [
+        function TracksTabController() {
             
             console.log('trackTab');
-                     
-            this.myTracks = function() {
+            
+            this.myTracks = function () {
                 var controller = angular.element($('#list')).scope().itemsController;
-				controller.setItems( 
-                    APIHelper.searchSounds('anime', function(result) {
-                        isInitialized = false;
+                controller.setItems(
+                    APIHelper.getMyTracks(function (result) {
                         var sounds = []
                         for (var i in result) {
                             sounds.push(getSoundObject(result[i], false));
                         }
                         return sounds;
                     })
-               );
+                );
             }
-            
-            this.faworites = function() {
-                
+
+            this.favorites = function () {
+                var controller = angular.element($('#list')).scope().itemsController;
+                controller.setItems(
+                    APIHelper.getMyFavorites(function (result) {
+                        var sounds = []
+                        for (var i in result) {
+                            sounds.push(getSoundObject(result[i], false));
+                        }
+                        return sounds;
+                    })
+                );
             }
-            
-            var getSoundObject = function(object, inPlaylist) {
+
+            var getSoundObject = function (object, inPlaylist) {
                 return SCHelper.buildSoundObject(object, inPlaylist);
             }
         }

@@ -64,12 +64,46 @@
                 }
             }
             
+            this.doLikeTrack = function(id) {
+                setLikeForSound(id, true);
+                Player.setLikeForSound(id, true);
+                APIHelper.doLikeTrack(id, function(data) {
+                });
+            }
+            
+            this.doUnLikeTrack = function(id) {
+                setLikeForSound(id, false);
+                Player.setLikeForSound(id, false);
+                APIHelper.doUnLikeTrack(id, function(data) {
+                });
+            }
+            
             this.goToSoundCloud = function(id) {
                 
             }
             
             this.getDownloadUrl = function(id) {
                 return APIHelper.getTrackURL(id);
+            }
+            
+            var setLikeForSound = function(soundId, like) {
+                var items = tc.list;
+                for (var i in items) {
+                    var item = items[i];
+                    if (item.type == 'sound') {
+                        if (item.id == soundId) {
+                            item.marked = like;
+                        }
+                    }
+                    if (item.type == 'playlist') {
+                        var sounds = item.sounds;
+                        for (var j in sounds) {
+                            if (sounds[j].id == soundId) {
+                                sounds[j].marked = like;
+                            }
+                        }
+                    }
+                }
             }
         }
     ]);

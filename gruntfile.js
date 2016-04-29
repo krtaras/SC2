@@ -99,14 +99,48 @@ module.exports = function(grunt) {
            ],
            dest: 'release/extension/app/style/style.css'
         }
-     }
+     },
+     
+     uglify: {
+        app: {
+            files: {
+              'release/extension/app/app.js': 'release/extension/app/app.js'
+            }
+        },
+        background: {
+            files: {
+              'release/extension/app/js/background.js': 'release/extension/app/js/background.js'
+            }
+        },
+        controllers: {
+            files: {
+              'release/extension/app/js/controllers.js': 'release/extension/app/js/controllers.js'
+            }
+        },
+        soundcloud: {
+            files: {
+              'release/extension/lib/soundmanager2.js': 'release/extension/lib/soundmanager2.js'
+            }
+        }
+     },
+     
+     cssmin: {
+        options: {
+            shorthandCompacting: false,
+            roundingPrecision: -1
+        },
+        target: {
+            files: {
+              'release/extension/app/style/style.css': 'release/extension/app/style/style.css'
+            }
+        }
+    }
      
   });
   
   require('load-grunt-tasks')(grunt, { scope: 'devDependencies' });
   require('time-grunt')(grunt);
   
-  grunt.registerTask('release', 'release', function() {
-      grunt.task.run(['clean','copy', 'concat', 'less']);
-  });
+  grunt.registerTask('build', ['clean','copy', 'concat', 'less']);
+  grunt.registerTask('release', ['build', 'uglify', 'cssmin']);
 };

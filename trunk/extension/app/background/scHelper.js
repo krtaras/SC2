@@ -38,7 +38,8 @@
             dynamicURL: false,
             url: APIHelper.getCompleteURL(object.uri),
             playMe: function(calback) {
-            }
+            },
+            marked: ((object.user_favorite) ? true : false)
         }
         return result;
     };

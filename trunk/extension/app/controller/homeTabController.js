@@ -1,48 +1,39 @@
-;(function () {
+//@ sourceURL=tracksTabController.js
+; (function () {
     'use strict';
     var app = angular.module('sound-cloud-player');
     var controllerName = 'HomeTabController';
-    var Player = chrome.extension.getBackgroundPage().Player;
     var APIHelper = chrome.extension.getBackgroundPage().APIHelper;
     var SCHelper = chrome.extension.getBackgroundPage().SCHelper;
-    app.controller(controllerName, ["$interval",
-        function HomeTabController($interval) {
-            var tc = this;
-            var selectedSoundId = -1;
-            var isInitialized = true;
-            
+    app.controller(controllerName, [
+        function HomeTabController() {
+            var htc = this;
             console.log('homeTab');
-            
-            this.currentUser = APIHelper.currentUser;
-            this.sound = Player.sound;
-            this.playlist = Player.playList;
-            this.list = Player.getItemsList();
+
             this.searchText = '';
-            
-            this.onenter = function(keyEvent) {
+
+            this.onenter = function (keyEvent) {
                 if (keyEvent.which === 13)
-                    tc.search();
+                    htc.search();
             }
-            
-            this.search = function() {
-                tc.list = [];
-                SCHelper.drawObjects($('#loading'),
-                    APIHelper.searchSounds(tc.searchText, function(result) {
-                        isInitialized = false;
+
+            this.search = function () {
+                var controller = angular.element($('#list')).scope().itemsController;
+                controller.setItems(
+                    APIHelper.searchSounds(htc.searchText, function (result) {
                         var sounds = []
                         for (var i in result) {
                             sounds.push(getSoundObject(result[i], false));
                         }
-                        tc.list = sounds;
+                       return sounds;
                     })
                 );
             }
-            
-            this.stream = function() {
-                tc.list = [];
-                SCHelper.drawObjects($('#loading'),
-                    APIHelper.getMyActivities(function(result){
-                        isInitialized = false;
+
+            this.stream = function () {
+                var controller = angular.element($('#list')).scope().itemsController;
+                controller.setItems(
+                   APIHelper.getMyActivities(function (result) {
                         var list = [];
                         for (var i in result) {
                             var object = result[i];
@@ -50,8 +41,8 @@
                                 list.push(getSoundObject(object.origin, false));
                             } else {
                                 if (object.type == 'playlist') {
-                                    var playlist = SCHelper.buildPlayListObject(object.origin);
-                                    APIHelper.getSoundsFromPlayList(playlist, function(playlist, result) {
+                                    var playlist = getPlayListObject(object);
+                                    APIHelper.getSoundsFromPlayList(playlist, function (playlist, result) {
                                         for (var i in result) {
                                             playlist.sounds.push(getSoundObject(result[i], true));
                                         }
@@ -60,16 +51,15 @@
                                 }
                             }
                         }
-                        tc.list = list;
+                        return list;
                     })
                 );
             }
-            
-            this.getCharts = function() {
-                tc.list = [];
-                SCHelper.drawObjects($('#loading'),
-                    APIHelper.getCharts(function(result) {
-                        isInitialized = false;
+
+            this.getCharts = function () {
+                var controller = angular.element($('#list')).scope().itemsController;
+                controller.setItems(
+                    APIHelper.getCharts(function (result) {
                         var list = [];
                         for (var i in result) {
                             var sound = result[i].track;
@@ -77,46 +67,18 @@
                                 list.push(getSoundObject(sound, false));
                             }
                         }
-                        tc.list = list;
+                        return list;
                     })
                 );
             }
-            
-            this.playSound = function(id, plId) {
-                if (!isInitialized) {
-                    Player.setItems(this.list, true);
-                    isInitialized = true;
-                }
-                if (plId == -1) {
-                    Player.playSoundById(id);
-                } else {
-                    Player.playSoundFromPlayListById(id, plId);
-                }
-                
-            }
-            
-            this.goToSoundCloud = function(id) {
-                
-            }
-            
-            this.getDownloadUrl = function(id) {
-                return APIHelper.getTrackURL(id);
-            }
-            
-            var getSoundObject = function(object, inPlaylist) {
+
+            var getSoundObject = function (object, inPlaylist) {
                 return SCHelper.buildSoundObject(object, inPlaylist);
             }
-            
-            var scrollTop = $interval(function() {
-               if (tc.sound.id != selectedSoundId) {
-                   SCHelper.scrollToSound($('#list'), tc.sound.id, tc.sound.inPlaylist, tc.playlist.id);
-                   selectedSoundId = tc.sound.id;
-               }
-            }, 1000);
-            
-            $('#list').on('$destroy', function() {
-                $interval.cancel(scrollTop);
-            });
+
+            var getPlayListObject = function(object) {
+                return  SCHelper.buildPlayListObject(object.origin);
+            }
         }
     ]);
 })();
