@@ -1,4 +1,1 @@
-;(function () {
-    'use strict';
-     angular.module('sound-cloud-player', []);
-})();
+!function(){"use strict";angular.module("sound-cloud-player",[])}();

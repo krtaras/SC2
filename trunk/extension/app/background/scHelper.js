@@ -1,5 +1,4 @@
-//@ sourceURL=SCHelper.js
-;var SCHelper = (function() {
+;var _SCHelper = (function() {
 	
     var scExtemsionLoadingHtml = 
     '<div class="spinner"> \
@@ -13,11 +12,11 @@
         <div class="rect-8"></div> \
     </div>';
     
-    function SCHelper() {
+    function _SCHelper() {
         
     }
     
-    SCHelper.prototype.drawObjects = function(loadingObj, apiCall) {
+    _SCHelper.prototype.drawObjects = function(loadingObj, apiCall) {
          loadingObj.html(scExtemsionLoadingHtml);
          apiCall.then(function() {
             setTimeout(function() {
@@ -26,7 +25,7 @@
          });
     }
     
-    SCHelper.prototype.buildSoundObject = function(object, inPlaylist, calback) {
+    _SCHelper.prototype.buildSoundObject = function(object, inPlaylist, calback) {
         var result = {
             type: 'sound',
             id: object.id,
@@ -44,18 +43,19 @@
         return result;
     };
     
-    SCHelper.prototype.buildPlayListObject = function(object) {
+    _SCHelper.prototype.buildPlayListObject = function(object) {
         return {
             type: 'playlist',
             id: object.id,
             title: object.title,
             art: object.artwork_url,
             index: 0,
-            sounds: []
+            sounds: [],
+            static: true
         }
     }
     
-    SCHelper.prototype.scrollToSound = function(listObj, soundId, inPlaylist, playlistId) {
+    _SCHelper.prototype.scrollToSound = function(listObj, soundId, inPlaylist, playlistId) {
         var topOffset = 0;
         if (inPlaylist) {
             if (listObj.find('#playlist-'+playlistId).find('#pl-sound-'+soundId).length > 0) {
@@ -70,5 +70,5 @@
         listObj.animate({ scrollTop: scrollTop+"px"});
     };
     
-    return SCHelper;
+    return _SCHelper;
 })();

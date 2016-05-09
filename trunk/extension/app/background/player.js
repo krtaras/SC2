@@ -1,9 +1,10 @@
-//@ sourceURL=Player.js
-;var Player = (function () {
+;var _Player = (function () {
 	
     soundManager.setup({
 		url: '/app/lib/',
 		flashVersion: 9,
+        debugMode: false,
+        debugFlash: false,
 		onready: function () {
 		}
 	});
@@ -12,7 +13,7 @@
 	var items;
     var itemIndex;
     
-	function Player() {
+	function _Player() {
         
         this.state = {
             volume:  50,
@@ -45,17 +46,21 @@
             art: "",
             index: 0,
             marked: false,
-            sounds: []
+            sounds: [],
+            static: true
         }
         
 		this.customProperty = {
 			
 		}
+        
+        this.notifyOnStartingPlayingSound = function(sound){};
+        
         items = [];
         itemIndex = 0;
 	};
 	
-    Player.prototype.setItems = function(list, replace) {
+    _Player.prototype.setItems = function(list, replace) {
         if (replace) {
             items = [];
         }
@@ -64,7 +69,7 @@
         }
     }
     
-	Player.prototype.playSoundById = function(soundId) {
+	_Player.prototype.playSoundById = function(soundId) {
 		for (var i in items) {
             var item = items[i];
             if (item.type == 'sound') {
@@ -77,7 +82,7 @@
 		doPlay.call(this);
 	}
     
-    Player.prototype.playSoundFromPlayListById = function(soundId, playlistId) {
+    _Player.prototype.playSoundFromPlayListById = function(soundId, playlistId) {
         var stopSearch = false;
         for (var i in items) {
             var item = items[i];
@@ -92,6 +97,8 @@
                             this.playList.name = item.name;
                             this.playList.index = parseInt(j);
                             this.playList.sounds = sounds;
+                            this.playList.marked = item.marked;
+                            this.playList.static = item.static;
                             break;
                         }
                     }
@@ -105,44 +112,44 @@
         doPlay.call(this);
     }
     
-	Player.prototype.play = function () {
+	_Player.prototype.play = function () {
 		doPlay.call(this);
 	}
 
-	Player.prototype.next = function () {
+	_Player.prototype.next = function () {
 		doNext.call(this);
 	}
 
-	Player.prototype.prev = function () {
+	_Player.prototype.prev = function () {
 		doPrev.call(this);
 	}
 
-	Player.prototype.stop = function () {
+	_Player.prototype.stop = function () {
 		doStop.call(this);
 	}
 
-	Player.prototype.toggle = function () {
+	_Player.prototype.toggle = function () {
 		doToggle.call(this);
 	}
 
-	Player.prototype.setPosition = function(position) {
+	_Player.prototype.setPosition = function(position) {
 		if (typeof playingSound !== "undefined") {
 			playingSound.setPosition(position * playingSound.duration / 100);
 		}
 	}
 	
-	Player.prototype.setVolume = function(volume) {
+	_Player.prototype.setVolume = function(volume) {
 		this.state.volume = volume;
 		if (typeof playingSound !== "undefined") {
 			playingSound.setVolume(this.state.volume);
 		}
 	}
 
-	Player.prototype.toggleRandomPlaying = function() {
+	_Player.prototype.toggleRandomPlaying = function() {
 		this.state.isRandom = !this.state.isRandom;
 	}
 
-	Player.prototype.mute = function() {
+	_Player.prototype.mute = function() {
 		this.state.isMute = !this.state.isMute;
 		if (this.state.isMute) {
 			playingSound.setVolume(0);
@@ -151,7 +158,7 @@
 		}
 	}
 	
-    Player.prototype.getItemsList = function() {
+    _Player.prototype.getItemsList = function() {
         if (items.length == 1) {
             if (items[0].type == 'playlist') {
                 return items[0].sounds;
@@ -160,13 +167,11 @@
         return items;
     }
     
-    Player.prototype.setLikeForSound = function(soundId, like) {
+    _Player.prototype.setLikeForSound = function(soundId, like) {
         for (var i in items) {
             var item = items[i];
-            if (item.type == 'sound') {
-                if (item.id == soundId) {
-                    item.marked = like;
-                }
+            if (item.type == 'sound' && item.id == soundId) {
+                item.marked = like;
             }
             if (item.type == 'playlist') {
                 var sounds = item.sounds;
@@ -175,6 +180,15 @@
                         sounds[j].marked = like;
                     }
                 }
+            }
+        }
+    }
+    
+    _Player.prototype.setLikeForPlaylist = function(playListId, like) {
+        for (var i in items) {
+            var item = items[i];
+            if (item.type == 'playlist' && item.id == playListId) {
+                item.marked = like;
             }
         }
     }
@@ -235,6 +249,7 @@
                     removeCurrentSound.call(player);
                     doNext.call(player);
                 }
+                player.notifyOnStartingPlayingSound(sound);
 			},
 			onfinish: function () {
 				doNext.call(player);
@@ -280,7 +295,21 @@
         var player = this;
         var changeIndex = true;
         if (items[itemIndex].type == 'playlist') {
-            var next = player.playList.index + 1; 
+            var next;
+            if (player.state.isRandom && player.playList.static) {
+                next = getRandomInPlayList(player.playList.sounds.length);
+            } else {
+                if (player.state.isRandom) {
+                    var jumpOut = Math.floor((Math.random() * 2) + 1);
+                    if (jumpOut > 1) {
+                         next = getRandomInPlayList(player.playList.sounds.length);
+                    } else {
+                        next = player.playList.sounds.length;
+                    }
+                } else {
+                    next = player.playList.index + 1;
+                }
+            }
             if (next >= player.playList.sounds.length && items.length == 1) {
                 player.playList.index = 0;
             } else {
@@ -310,6 +339,20 @@
         var changeIndex = true;
         if (items[itemIndex].type == 'playlist') {
             var prev = player.playList.index - 1; 
+            if (player.state.isRandom && player.playList.static) {
+                prev = getRandomInPlayList(player.playList.sounds.length) - 1;
+            } else {
+               if (player.state.isRandom) {
+                    var jumpOut = Math.floor((Math.random() * 2) + 1);
+                    if (jumpOut > 1) {
+                         prev = getRandomInPlayList(player.playList.sounds.length);
+                    } else {
+                        prev = -1;
+                    }
+                } else {
+                    prev = player.playList.index - 1;
+                }
+            }
             if (prev < 0 && items.length == 1) {
                 player.playList.index = player.playList.sounds.length - 1;;
             } else {
@@ -343,10 +386,16 @@
 	}
     
     var getRandom = function() {
-        var max = items.length-1;
-        var index = Math.floor((Math.random() * max) + 1);
+        var max = items.length;
+        var index = Math.floor((Math.random() * max) + 1) - 1;
         return index;
     }
     
-    return Player;
+    var getRandomInPlayList = function(playListSize) {
+        var max = playListSize;
+        var index = Math.floor((Math.random() * max) + 1) - 1;
+        return index;
+    }
+    
+    return _Player;
 })();

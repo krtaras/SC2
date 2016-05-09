@@ -1,5 +1,4 @@
-//@ sourceURL=PlayerHelper.js
-;var PlayerHelper = (function(){
+;var _PlayerHelper = (function(){
     var htmlUrls = {
         max: '/extension/app/view/player-max.html',
         min: '/extension/app/view/player-min.html',
@@ -15,7 +14,7 @@
     var playListsTabName = "playLists";
     var settingsTabName = "settings";
     
-    function PlayerHelper() {
+    function _PlayerHelper() {
         this.view  = {
             isMinimized: false,
             isTabsOpened: false,
@@ -33,36 +32,36 @@
         updateState.call(this);
     };
     
-    PlayerHelper.prototype.minimize = function() {
+    _PlayerHelper.prototype.minimize = function() {
         this.view.isMinimized = true;
         this.view.isTabsOpened = false;
         updateState.call(this);
     }
-    PlayerHelper.prototype.maximize = function() {
+    _PlayerHelper.prototype.maximize = function() {
         this.view.isMinimized = false;
         updateState.call(this);
     }
-    PlayerHelper.prototype.openTabs = function() {
+    _PlayerHelper.prototype.openTabs = function() {
         this.view.isTabsOpened = true;
         updateState.call(this);
     }
-    PlayerHelper.prototype.closeTabs = function() {
+    _PlayerHelper.prototype.closeTabs = function() {
         this.view.isTabsOpened = false;
         updateState.call(this);
     }
-    PlayerHelper.prototype.openHomeTab = function() {
+    _PlayerHelper.prototype.openHomeTab = function() {
         this.view.activeTab = htmlUrls.homeTab;
         this.view.activeTabName = homeTabName;
     }
-    PlayerHelper.prototype.openTracksTab = function() {
+    _PlayerHelper.prototype.openTracksTab = function() {
         this.view.activeTab = htmlUrls.tracksTab;
         this.view.activeTabName = tracksTabName;
     }
-    PlayerHelper.prototype.openPlayListTab = function() {
+    _PlayerHelper.prototype.openPlayListTab = function() {
         this.view.activeTab = htmlUrls.playListTab;
         this.view.activeTabName = playListsTabName;
     }
-    PlayerHelper.prototype.openSettingsTab = function() {
+    _PlayerHelper.prototype.openSettingsTab = function() {
         this.view.activeTab = htmlUrls.settingsTab;
         this.view.activeTabName = settingsTabName;
     }
@@ -71,5 +70,5 @@
         ps.view.viewURL = ps.view.isMinimized ? htmlUrls.min : htmlUrls.max;
         ps.view.tabsURL = ps.view.isTabsOpened ? htmlUrls.tabs : "" ;
     }
-    return PlayerHelper;
+    return _PlayerHelper;
 })();

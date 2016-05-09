@@ -89,6 +89,12 @@
                 Player.toggleRandomPlaying();
             }
             
+            this.windowMode = function() {
+                var pageURL = chrome.extension.getURL('window_mode.html');
+                chrome.windows.create({ url: pageURL, type: 'popup', 'width': 370, 'height': 120 });
+                window.close();
+            }
+            
             function updateVolumeIcon() {
                 if (Player.state.isMute) {
                     pc.volumeIcon = "volume_off";

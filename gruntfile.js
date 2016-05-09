@@ -3,9 +3,8 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     banner: '/*!\n' +
-            ' * SoundCloudPlayer v<%= pkg.version %> (<%= pkg.homepage %>)\n' +
+            ' * SoundCloudPlayer v<%= pkg.version %>\n' +
             ' * Copyright 2015-<%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
-            ' * Licensed under the <%= pkg.license %> license\n' +
             ' */\n',
             
      //Clean release folder
@@ -43,7 +42,9 @@ module.exports = function(grunt) {
             {cwd: 'trunk/extension/app/', src: 'app.js', dest: 'release/extension/app/', expand: true},
             {cwd: 'trunk/', src: 'popup.html', dest: 'release/', expand: true},
             {cwd: 'trunk/', src: 'background.html', dest: 'release/', expand: true},
-            {cwd: 'trunk/', src: 'manifest.json', dest: 'release/', expand: true}
+            {cwd: 'trunk/', src: 'manifest.json', dest: 'release/', expand: true},
+            {cwd: 'trunk/', src: 'redirect.html', dest: 'release/', expand: true},
+            {cwd: 'trunk/', src: 'window_mode.html', dest: 'release/', expand: true}
           ]
         }
      },
@@ -55,13 +56,13 @@ module.exports = function(grunt) {
             },
             files: {"trunk/extension/style/theme.css": "trunk/extension/style/theme.less"}
         },
-        production: {
+       /* production: {
             options: {
                 paths: ["assets/css"],
                 cleancss: true
             },
             files: {"trunk/extension/style/theme.css": "trunk/extension/style/theme.less"}
-        }
+        }*/
      },
      
      concat: {
@@ -71,6 +72,7 @@ module.exports = function(grunt) {
         },
         background: {
           src: [
+            'trunk/extension/app/background/background.js',
             'trunk/extension/app/background/apiHelper.js',
             'trunk/extension/app/background/player.js',
             'trunk/extension/app/background/playerHelper.js',
@@ -121,6 +123,11 @@ module.exports = function(grunt) {
             files: {
               'release/extension/lib/soundmanager2.js': 'release/extension/lib/soundmanager2.js'
             }
+        },
+        attrchange: {
+            files: {
+              'release/extension/lib/attrchange.js': 'release/extension/lib/attrchange.js'
+            }
         }
      },
      
@@ -141,6 +148,6 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt, { scope: 'devDependencies' });
   require('time-grunt')(grunt);
   
-  grunt.registerTask('build', ['clean','copy', 'concat', 'less']);
+  grunt.registerTask('build', ['clean','copy', 'less', 'concat']);
   grunt.registerTask('release', ['build', 'uglify', 'cssmin']);
 };

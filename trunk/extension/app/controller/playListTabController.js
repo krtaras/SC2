@@ -1,4 +1,3 @@
-//@ sourceURL=tracksTabController.js
 ; (function () {
     'use strict';
     var app = angular.module('sound-cloud-player');
@@ -7,8 +6,6 @@
     var SCHelper = chrome.extension.getBackgroundPage().SCHelper;
     app.controller(controllerName, [
         function PlayListTabController() {
-            
-            console.log('playListTab');
             
             this.myPlaylists = function () {
                 var controller = angular.element($('#list')).scope().itemsController;

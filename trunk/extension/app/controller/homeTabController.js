@@ -1,4 +1,3 @@
-//@ sourceURL=tracksTabController.js
 ; (function () {
     'use strict';
     var app = angular.module('sound-cloud-player');
@@ -8,7 +7,6 @@
     app.controller(controllerName, [
         function HomeTabController() {
             var htc = this;
-            console.log('homeTab');
 
             this.searchText = '';
 
@@ -42,6 +40,7 @@
                             } else {
                                 if (object.type == 'playlist') {
                                     var playlist = getPlayListObject(object);
+                                    playlist.static = false;
                                     APIHelper.getSoundsFromPlayList(playlist, function (playlist, result) {
                                         for (var i in result) {
                                             playlist.sounds.push(getSoundObject(result[i], true));
