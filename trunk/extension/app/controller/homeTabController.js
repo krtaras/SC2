@@ -35,8 +35,10 @@
                         var list = [];
                         for (var i in result) {
                             var object = result[i];
-                            if (object.type == 'track') {
-                                list.push(getSoundObject(object.origin, false));
+                            if (object.type.includes('track')) {
+                                if (object.origin) {
+                                    list.push(getSoundObject(object.origin, false));
+                                }
                             } else {
                                 if (object.type == 'playlist') {
                                     var playlist = getPlayListObject(object);
