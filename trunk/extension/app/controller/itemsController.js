@@ -118,13 +118,17 @@
             this.goToSoundCloudTrack = function (id) {
                 APIHelper.getTrackPermalinkURL(id);
             }
-            
+
              this.goToSoundCloudPlayList = function (id) {
                 APIHelper.getPlayListPermalinkURL(id);
             }
 
             this.getDownloadUrl = function (id) {
                 return APIHelper.getTrackURL(id);
+            }
+
+            this.normalizeString = function (string) {
+                return !!string ? string.replace(/ /g,'_') : '';
             }
 
             var setLikeForSound = function (soundId, like) {
@@ -144,7 +148,7 @@
                     }
                 }
             }
-            
+
             var setLikeForPlaylist = function (playListId, like) {
                 var items = tc.list;
                 for (var i in items) {
