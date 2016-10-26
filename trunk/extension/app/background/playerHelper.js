@@ -8,12 +8,12 @@
         playListTab: '/extension/app/view/playListTab.html',
         settingsTab: '/extension/app/view/settingsTab.html'
     }
-    
+
     var homeTabName = "home";
-    var tracksTabName = "traks";
+    var tracksTabName = "tracks";
     var playListsTabName = "playLists";
     var settingsTabName = "settings";
-    
+
     function _PlayerHelper() {
         this.view  = {
             isMinimized: false,
@@ -31,7 +31,7 @@
         }
         updateState.call(this);
     };
-    
+
     _PlayerHelper.prototype.minimize = function() {
         this.view.isMinimized = true;
         this.view.isTabsOpened = false;
