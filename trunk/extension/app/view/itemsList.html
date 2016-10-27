@@ -10,7 +10,7 @@
                 <i title="like" class="material-icons" ng-if="currentUser.scUser && !item.marked" ng-click="itemsController.doLikeTrack(item.id)">favorite_border</i>
                 <i title="unlike" class="material-icons" ng-if="currentUser.scUser && item.marked" ng-click="itemsController.doUnLikeTrack(item.id)">favorite</i>
                 <i title="open in web" class="material-icons" ng-click="itemsController.goToSoundCloudTrack(item.id)">exit_to_app</i>
-                <a href="{{itemsController.getDownloadUrl(item.id)}}" download="{{itemsController.normalizeString(sound.title)}}.mp3">
+                <a href="{{itemsController.getDownloadUrl(item.id)}}" download="{{itemsController.normalizeString(item.title)}}.mp3">
                     <i title="download" class="material-icons">file_download</i>
                 </a>
             </div>
@@ -37,7 +37,7 @@
                     <i class="material-icons" ng-if="currentUser.scUser && !sound.marked" ng-click="itemsController.doLikeTrack(sound.id)">favorite_border</i>
                     <i class="material-icons" ng-if="currentUser.scUser && sound.marked" ng-click="itemsController.doUnLikeTrack(sound.id)">favorite</i>
                     <i class="material-icons" ng-click="itemsController.goToSoundCloudTrack(sound.id)">exit_to_app</i>
-                    <a href="{{itemsController.getDownloadUrl(item.id)}}"  download="{{itemsController.normalizeString(sound.title)}}.mp3">
+                    <a href="{{itemsController.getDownloadUrl(sound.id)}}"  download="{{itemsController.normalizeString(sound.title)}}.mp3">
                         <i class="material-icons">file_download</i>
                     </a>
                 </div>

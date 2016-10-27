@@ -588,6 +588,10 @@
   margin: 5px;
   line-height: 35px;
 }
+.sc-extension .tabs .list .sound .actions a:focus,
+.sc-extension .tabs .list .playlist .actions a:focus {
+  outline-style: inherit;
+}
 .sc-extension .tabs .list .sound .actions i,
 .sc-extension .tabs .list .playlist .actions i {
   font-size: 18px;

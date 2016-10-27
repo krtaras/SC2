@@ -3,7 +3,7 @@
   "minimum_chrome_version": "32.0.0.0",
   "name": "SoundCloud Player",
   "description": "SoundCloud Player",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "icons": {
           "16": "extension/icons/16x16.png",
           "19": "extension/icons/19x19.png",
