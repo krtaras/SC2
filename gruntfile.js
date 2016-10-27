@@ -15,36 +15,36 @@ module.exports = function(grunt) {
      copy: {
         view: {
           expand: true,
-          cwd: 'trunk/extension/app/view/',
+          cwd: 'src/extension/app/view/',
           src: '**',
           dest: 'release/extension/app/view/',
         },
         lib: {
           expand: true,
-          cwd: 'trunk/extension/lib/',
+          cwd: 'src/extension/lib/',
           src: '**',
           dest: 'release/extension/lib/',
         },
         font: {
           expand: true,
-          cwd: 'trunk/extension/style/font/',
+          cwd: 'src/extension/style/font/',
           src: '**',
           dest: 'release/extension/app/style/font/',
         },
         icons: {
           expand: true,
-          cwd: 'trunk/icons/',
+          cwd: 'src/icons/',
           src: '**',
           dest: 'release/extension/icons/',
         },
         files: {
           files: [
-            {cwd: 'trunk/extension/app/', src: 'app.js', dest: 'release/extension/app/', expand: true},
-            {cwd: 'trunk/', src: 'popup.html', dest: 'release/', expand: true},
-            {cwd: 'trunk/', src: 'background.html', dest: 'release/', expand: true},
-            {cwd: 'trunk/', src: 'manifest.json', dest: 'release/', expand: true},
-            {cwd: 'trunk/', src: 'redirect.html', dest: 'release/', expand: true},
-            {cwd: 'trunk/', src: 'window_mode.html', dest: 'release/', expand: true}
+            {cwd: 'src/extension/app/', src: 'app.js', dest: 'release/extension/app/', expand: true},
+            {cwd: 'src/', src: 'popup.html', dest: 'release/', expand: true},
+            {cwd: 'src/', src: 'background.html', dest: 'release/', expand: true},
+            {cwd: 'src/', src: 'manifest.json', dest: 'release/', expand: true},
+            {cwd: 'src/', src: 'redirect.html', dest: 'release/', expand: true},
+            {cwd: 'src/', src: 'window_mode.html', dest: 'release/', expand: true}
           ]
         }
      },
@@ -54,14 +54,14 @@ module.exports = function(grunt) {
             options: {
                 paths: ["assets/css"]
             },
-            files: {"trunk/extension/style/theme.css": "trunk/extension/style/theme.less"}
+            files: {"src/extension/style/theme.css": "src/extension/style/theme.less"}
         },
        /* production: {
             options: {
                 paths: ["assets/css"],
                 cleancss: true
             },
-            files: {"trunk/extension/style/theme.css": "trunk/extension/style/theme.less"}
+            files: {"src/extension/style/theme.css": "src/extension/style/theme.less"}
         }*/
      },
      
@@ -72,32 +72,32 @@ module.exports = function(grunt) {
         },
         background: {
           src: [
-            'trunk/extension/app/background/background.js',
-            'trunk/extension/app/background/apiHelper.js',
-            'trunk/extension/app/background/player.js',
-            'trunk/extension/app/background/playerHelper.js',
-            'trunk/extension/app/background/scHelper.js',
-            'trunk/extension/app/background/init.js',
+            'src/extension/app/background/background.js',
+            'src/extension/app/background/apiHelper.js',
+            'src/extension/app/background/player.js',
+            'src/extension/app/background/playerHelper.js',
+            'src/extension/app/background/scHelper.js',
+            'src/extension/app/background/init.js',
           ],
           dest: 'release/extension/app/js/background.js'
         },
         controllers: {
           src: [
-            'trunk/extension/app/controller/homeTabController.js',
-            'trunk/extension/app/controller/itemsController.js',
-            'trunk/extension/app/controller/loginController.js',
-            'trunk/extension/app/controller/playerController.js',
-            'trunk/extension/app/controller/playListTabController.js',
-            'trunk/extension/app/controller/settingsTabController.js',
-            'trunk/extension/app/controller/stateController.js',
-            'trunk/extension/app/controller/tracksTabController.js',
+            'src/extension/app/controller/homeTabController.js',
+            'src/extension/app/controller/itemsController.js',
+            'src/extension/app/controller/loginController.js',
+            'src/extension/app/controller/playerController.js',
+            'src/extension/app/controller/playListTabController.js',
+            'src/extension/app/controller/settingsTabController.js',
+            'src/extension/app/controller/stateController.js',
+            'src/extension/app/controller/tracksTabController.js',
           ],
           dest: 'release/extension/app/js/controllers.js'
         },
         styles : {
            src: [
-             'trunk/extension/style/materialize-icons.css',
-             'trunk/extension/style/theme.css',
+             'src/extension/style/materialize-icons.css',
+             'src/extension/style/theme.css',
            ],
            dest: 'release/extension/app/style/style.css'
         }
