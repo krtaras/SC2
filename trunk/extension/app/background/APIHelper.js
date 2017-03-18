@@ -1,18 +1,22 @@
 ; var _APIHelper = (function (SC) {
 
-    var client_id = 'c0e833fecbe9557b9ba8e676b4786b3a';
-    var connectionURL = 'https://soundcloud.com/connect?client_id=c0e833fecbe9557b9ba8e676b4786b3a&redirect_uri=http%3a%2f%2fkrtaras.github.io%2fsound-cloud%2fcallback.html&response_type=token&scope=non-expiring';
-    var access_token = '';
+    //var client_id = 'c0e833fecbe9557b9ba8e676b4786b3a';
 
+    //var client_id = '2t9loNQH90kzJcsFCODdigxfp325aq4z'
+    var client_id = ''
+    //var connectionURL = 'https://soundcloud.com/connect?client_id=c0e833fecbe9557b9ba8e676b4786b3a&redirect_uri=http%3a%2f%2fkrtaras.github.io%2fsound-cloud%2fcallback.html&response_type=token&scope=non-expiring';
+    var connectionURL = 'https://soundcloud.com/';
+
+    var access_token = '';
 
     var isGuest = false;
     var isLoginned = false;
     var scUser = false;
     var tracksSize = 200;
 
-    SC.initialize({
+    /*SC.initialize({
         client_id: client_id,
-    });
+    });*/
 
     function _APIHelper() {
         this.currentUser = {
@@ -44,15 +48,15 @@
                 isLoginned = settings.isLoginned;
                 if (access_token == "") {
                     if (isLoginned) {
-                         isGuest = true;
-                         scUser = false;
+                        isGuest = true;
+                        scUser = false;
                     } else {
-                         isGuest = false;
-                         scUser = false;
+                        isGuest = false;
+                        scUser = false;
                     }
                 } else {
                     SC.initialize({
-                        client_id: client_id,
+                        //client_id: client_id,
                         oauth_token: access_token
                     });
                     isGuest = settings.isGuest;
@@ -67,13 +71,13 @@
         });
     }
 
-    _APIHelper.prototype.clearStorage = function() {
-        chrome.storage.local.remove('scAPIAuthorization', function(result) { 
+    _APIHelper.prototype.clearStorage = function () {
+        chrome.storage.local.remove('scAPIAuthorization', function (result) {
         });
     }
 
     _APIHelper.prototype.setTrackSize = function (size) {
-        if (size >= 10 && size <= 200) {
+        if (size >= 10) {
             tracksSize = size;
             this.tracksSize = size;
         }
@@ -93,8 +97,29 @@
         chrome.tabs.create({ url: connectionURL, selected: true }, function (tab) {
             var authTabId = tab.id;
             chrome.tabs.onUpdated.addListener(function tabUpdateListener(tabId, changeInfo) {
+                if (changeInfo.status == 'complete' && tab.active) {
+                    chrome.tabs.sendMessage(tab.id, { text: 'getAuthData' }, function (token) {
+                        if (token != undefined) {
+                            if (token != null && token != '') {
+                                SC.initialize({
+                                    //client_id: client_id,
+                                    oauth_token: token
+                                });
+                                access_token = token;
+                                isLoginned = true;
+                                scUser = true;
+                                isGuest = false;
+                            }
+                            api.currentUser.isLoginned = isLoginned;
+                            api.currentUser.isGuest = isGuest;
+                            api.currentUser.scUser = scUser;
+                            setSettings.call(api);
+                        }
+                    });
+                }
+
                 if (tabId == authTabId && changeInfo.url != undefined && changeInfo.status == "loading") {
-                    if (changeInfo.url.indexOf('access_token') > -1) {
+                    /*if (changeInfo.url.indexOf('access_token') > -1) {
                         access_token = getParam('#access_token', changeInfo.url);
                         if (access_token != null && access_token != '') {
                             SC.initialize({
@@ -110,13 +135,34 @@
                         api.currentUser.scUser = scUser;
                         setSettings.call(api);
                         chrome.tabs.remove(tabId, function () { });
+                    }*/
+
+                    /*if (this.token != null && this.token != '') {
+                        SC.initialize({
+                            client_id: client_id,
+                            oauth_token: this.token
+                        });
+                        isLoginned = true;
+                        scUser = true;
+                        isGuest = false;
                     }
+                    api.currentUser.isLoginned = isLoginned;
+                    api.currentUser.isGuest = isGuest;
+                    api.currentUser.scUser = scUser;
+                    setSettings.call(api);*/
+
+                    //console.log(document);
                 }
             });
         });
     }
 
     _APIHelper.prototype.searchSounds = function (searchStr, callback) {
+        var list = [];
+        return getSounds(list, searchStr, callback);
+    }
+
+    _APIHelper.prototype.searchSoundsOld = function (searchStr, callback) {
         return callGetAPI('/tracks', { q: searchStr, limit: tracksSize }, function (data) {
             return callback(data);
         });
@@ -129,7 +175,7 @@
     }
 
     _APIHelper.prototype.getCharts = function (callback) {
-        return $.getJSON('https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud%3Agenres%3Aall-music&client_id=' + client_id + '&limit='+tracksSize)
+        return $.getJSON('https://api-v2.soundcloud.com/charts?kind=top&genre=soundcloud%3Agenres%3Aall-music&client_id=' + client_id + '&limit=' + tracksSize)
             .then(function (data) {
                 return callback(data.collection);
             });
@@ -227,6 +273,22 @@
         });
     }
 
+    function getSounds(list, searchStr, callback) {
+        return callGetAPI('/tracks', { q: searchStr, offset: list.length, limit: getLimit(list) }, function (data) {
+            list = copyToList(list, data);
+            if (list.length < tracksSize) {
+                return getSounds(list, searchStr, callback);
+            } else {
+                return callback(list);
+            }
+        });
+    }
+
+    function getLimit(list) {
+        var diff = tracksSize - list.length;
+        return diff < 200 ? diff : 200;
+    }
+
     function callGetAPI(str, params, callback) {
         return SC.get(str, params).then(callback);
     }
@@ -253,6 +315,13 @@
             return vars[param] ? vars[param] : null;
         }
         return vars;
+    }
+
+    function copyToList(list, data) {
+        for (var i in data) {
+            list.push(data[i]);
+        }
+        return list;
     }
 
     return _APIHelper;

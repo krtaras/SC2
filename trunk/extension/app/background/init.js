@@ -93,4 +93,30 @@ var Settings = new _Settings();
 Settings.init();
 
 
+chrome.commands.onCommand.addListener(function(command) {
+    console.log('Command:', command);
+    switch (command) {
+        case "toggle": {
+            Player.toggle();
+            break;
+        }
+        case "next": {
+            Player.next();
+            break;
+        }
+        case "back": {
+            Player.prev();
+            break;
+        }
+        case "replay": {
+            Player.play();
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+});
+
+
 

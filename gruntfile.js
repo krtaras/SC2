@@ -39,6 +39,7 @@ module.exports = function(grunt) {
         },
         files: {
           files: [
+            {cwd: 'trunk/extension/app/background/', src: 'content.js', dest: 'release/extension/app/js/', expand: true},
             {cwd: 'trunk/extension/app/', src: 'app.js', dest: 'release/extension/app/', expand: true},
             {cwd: 'trunk/', src: 'popup.html', dest: 'release/', expand: true},
             {cwd: 'trunk/', src: 'background.html', dest: 'release/', expand: true},
