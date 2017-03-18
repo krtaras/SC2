@@ -1,10 +1,7 @@
 ; var _APIHelper = (function (SC) {
 
-    //var client_id = 'c0e833fecbe9557b9ba8e676b4786b3a';
-
     //var client_id = '2t9loNQH90kzJcsFCODdigxfp325aq4z'
-    var client_id = ''
-    //var connectionURL = 'https://soundcloud.com/connect?client_id=c0e833fecbe9557b9ba8e676b4786b3a&redirect_uri=http%3a%2f%2fkrtaras.github.io%2fsound-cloud%2fcallback.html&response_type=token&scope=non-expiring';
+    var client_id = '2t9loNQH90kzJcsFCODdigxfp325aq4z';
     var connectionURL = 'https://soundcloud.com/';
 
     var access_token = '';
@@ -14,9 +11,9 @@
     var scUser = false;
     var tracksSize = 200;
 
-    /*SC.initialize({
+    SC.initialize({
         client_id: client_id,
-    });*/
+    });
 
     function _APIHelper() {
         this.currentUser = {
@@ -25,6 +22,7 @@
             scUser: false
         };
         this.tracksSize = 200;
+        this.version = '1.0.0';
     }
 
     function setSettings() {
@@ -33,7 +31,8 @@
             access_token: access_token,
             isGuest: api.currentUser.isGuest,
             isLoginned: api.currentUser.isLoginned,
-            scUser: api.currentUser.scUser
+            scUser: api.currentUser.scUser,
+            version: api.version
         };
         chrome.storage.local.set({ 'scAPIAuthorization': settings }, function () {
         });
@@ -44,6 +43,13 @@
         chrome.storage.local.get('scAPIAuthorization', function (result) {
             if (result.scAPIAuthorization) {
                 var settings = result.scAPIAuthorization;
+                if (!settings.version || settings.version != api.version) {
+                    api.currentUser.isLoginned = false;
+                    api.currentUser.isGuest = false;
+                    api.currentUser.scUser = false;
+                    setSettings.call(api);
+                    return;
+                }
                 access_token = settings.access_token;
                 isLoginned = settings.isLoginned;
                 if (access_token == "") {
@@ -56,7 +62,7 @@
                     }
                 } else {
                     SC.initialize({
-                        //client_id: client_id,
+                        client_id: client_id,
                         oauth_token: access_token
                     });
                     isGuest = settings.isGuest;
@@ -96,30 +102,35 @@
         var api = this;
         chrome.tabs.create({ url: connectionURL, selected: true }, function (tab) {
             var authTabId = tab.id;
+            chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+                if (msg.text === 'setAuthData') {
+                    var token = msg.token;
+                    if (token != undefined) {
+                        if (token != null && token != '') {
+                            SC.initialize({
+                                client_id: client_id,
+                                oauth_token: token
+                            });
+                            access_token = token;
+                            isLoginned = true;
+                            scUser = true;
+                            isGuest = false;
+                        }
+                        api.currentUser.isLoginned = isLoginned;
+                        api.currentUser.isGuest = isGuest;
+                        api.currentUser.scUser = scUser;
+                        setSettings.call(api);
+                    }
+                    chrome.tabs.remove(authTabId, function () { });
+                }
+            });
             chrome.tabs.onUpdated.addListener(function tabUpdateListener(tabId, changeInfo) {
                 if (changeInfo.status == 'complete' && tab.active) {
-                    chrome.tabs.sendMessage(tab.id, { text: 'getAuthData' }, function (token) {
-                        if (token != undefined) {
-                            if (token != null && token != '') {
-                                SC.initialize({
-                                    //client_id: client_id,
-                                    oauth_token: token
-                                });
-                                access_token = token;
-                                isLoginned = true;
-                                scUser = true;
-                                isGuest = false;
-                            }
-                            api.currentUser.isLoginned = isLoginned;
-                            api.currentUser.isGuest = isGuest;
-                            api.currentUser.scUser = scUser;
-                            setSettings.call(api);
-                        }
-                    });
+                    chrome.tabs.sendMessage(tab.id, { text: 'getAuthData', id: chrome.runtime.id });
                 }
 
-                if (tabId == authTabId && changeInfo.url != undefined && changeInfo.status == "loading") {
-                    /*if (changeInfo.url.indexOf('access_token') > -1) {
+                /*if (tabId == authTabId && changeInfo.url != undefined && changeInfo.status == "loading") {
+                    if (changeInfo.url.indexOf('access_token') > -1) {
                         access_token = getParam('#access_token', changeInfo.url);
                         if (access_token != null && access_token != '') {
                             SC.initialize({
@@ -135,9 +146,9 @@
                         api.currentUser.scUser = scUser;
                         setSettings.call(api);
                         chrome.tabs.remove(tabId, function () { });
-                    }*/
+                    }
 
-                    /*if (this.token != null && this.token != '') {
+                    if (this.token != null && this.token != '') {
                         SC.initialize({
                             client_id: client_id,
                             oauth_token: this.token
@@ -149,10 +160,8 @@
                     api.currentUser.isLoginned = isLoginned;
                     api.currentUser.isGuest = isGuest;
                     api.currentUser.scUser = scUser;
-                    setSettings.call(api);*/
-
-                    //console.log(document);
-                }
+                    setSettings.call(api);
+                }*/
             });
         });
     }

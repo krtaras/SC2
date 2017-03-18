@@ -3,23 +3,29 @@
     "minimum_chrome_version": "32.0.0.0",
     "name": "SoundCloud Player",
     "description": "SoundCloud Player",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "icons": {
-        "16": "extension/icons/16x16.png",
-        "19": "extension/icons/19x19.png",
-        "32": "extension/icons/32x32.png",
-        "38": "extension/icons/38x38.png",
-        "48": "extension/icons/48x48.png",
-        "128": "extension/icons/128x128.png"
+        "16": "extension/icons/16.png",
+        "19": "extension/icons/19.png",
+        "24": "extension/icons/24.png",
+        "32": "extension/icons/32.png",
+        "38": "extension/icons/38.png",
+        "48": "extension/icons/48.png",
+        "64": "extension/icons/64.png",
+        "96": "extension/icons/96.png",
+        "128": "extension/icons/128.png"
     },
     "browser_action": {
         "default_icon": {
-            "16": "extension/icons/16x16.png",
-            "19": "extension/icons/19x19.png",
-            "32": "extension/icons/32x32.png",
-            "38": "extension/icons/38x38.png",
-            "48": "extension/icons/48x48.png",
-            "128": "extension/icons/128x128.png"
+            "16": "extension/icons/16.png",
+            "19": "extension/icons/19.png",
+            "24": "extension/icons/24.png",
+            "32": "extension/icons/32.png",
+            "38": "extension/icons/38.png",
+            "48": "extension/icons/48.png",
+            "64": "extension/icons/64.png",
+            "96": "extension/icons/96.png",
+            "128": "extension/icons/128.png"
         },
         "default_title": "SoundCloud Player",
         "default_popup": "popup.html"

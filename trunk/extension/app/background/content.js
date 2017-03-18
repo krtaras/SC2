@@ -2,7 +2,8 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     if (msg.text === 'getAuthData') {
         var token = getCookie("oauth_token");
         if (token != "") {
-            sendResponse.call(this, token);
+            //sendResponse.call(this, token);
+            chrome.runtime.sendMessage(msg.id, { text: 'setAuthData', token: token });
             console.log(token);
         }
     }
