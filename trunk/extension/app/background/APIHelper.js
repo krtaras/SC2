@@ -1,7 +1,7 @@
 ; var _APIHelper = (function (SC) {
 
     //var client_id = '2t9loNQH90kzJcsFCODdigxfp325aq4z'
-    var client_id = '2t9loNQH90kzJcsFCODdigxfp325aq4z';
+    var client_id = 'MOu7MScOfOzyf2N6ujt5sYSC55N7gBae';
     var connectionURL = 'https://soundcloud.com/';
 
     var access_token = '';
